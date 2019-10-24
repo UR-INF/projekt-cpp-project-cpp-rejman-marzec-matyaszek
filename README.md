@@ -1,7 +1,7 @@
 # Sudoku
 
 ## Autorzy
--Konrad Rejman
--Mateusz Matyaszek
--Adam Marzec
+- Konrad Rejman
+- Mateusz Matyaszek
+- Adam Marzec
 
