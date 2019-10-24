@@ -1,7 +1,5 @@
 #pragma once
 
-#include <array>
-
 namespace Sudoku {
 
 	using namespace System;
@@ -16,7 +14,6 @@ namespace Sudoku {
 	/// </summary>
 	public ref class MainForm : public System::Windows::Forms::Form
 	{
-		
 	public:
 		MainForm(void)
 		{
@@ -42,9 +39,7 @@ namespace Sudoku {
 		/// <summary>
 		/// Required designer variable.
 		/// </summary>
-		System::ComponentModel::Container ^components;
-		
-
+		System::ComponentModel::Container^ components;
 
 #pragma region Windows Form Designer generated code
 		/// <summary>
@@ -53,74 +48,79 @@ namespace Sudoku {
 		/// </summary>
 		void InitializeComponent(void)
 		{
-
 			this->SuspendLayout();
 			// 
 			// MainForm
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
-			this->ClientSize = System::Drawing::Size(479, 294);
+			this->ClientSize = System::Drawing::Size(482, 379);
 			this->Name = L"MainForm";
 			this->Text = L"MainForm";
 			this->ResumeLayout(false);
-			main();
-		}
-		void main() {
-			//std::array<TextBox^, 81> data;
 
-			createBoard();
+			inicializeBoard();
 		}
-		void createBoard() {
+		//	WARNING!!!
+		//after editing MainForm in design view
+		//all stuff in InitializeComponent() are overwritten
+		//so this function must be always credited in InitializeComponent()
+		void inicializeBoard() {
+
+			this->Controls->Add(createBoard());
+		}
+
+		TableLayoutPanel^ createBoard() {
 
 			int const SIZE = 3;
 
-			TableLayoutPanel^ mainTablePanel = gcnew System::Windows::Forms::TableLayoutPanel();
-			
+			TableLayoutPanel^ baord = gcnew System::Windows::Forms::TableLayoutPanel();
+
 			for (int i = 0; i < SIZE; i++) {
 				TableLayoutPanel^ table = gcnew System::Windows::Forms::TableLayoutPanel();
-				
+
 				table->ColumnCount = SIZE;
 				table->RowCount = SIZE;
-				
-				
-				for (int j = 0; j < SIZE; j++){
+
+
+				for (int j = 0; j < SIZE; j++) {
 					table->Controls->Add(createSmallBoard(), j, i);
 					table->ColumnStyles->Add((gcnew System::Windows::Forms::ColumnStyle()));
 					table->RowStyles->Add((gcnew System::Windows::Forms::ColumnStyle()));
 
 				}
 				table->AutoSize = true;
-				mainTablePanel->Controls->Add(table);
+				baord->Controls->Add(table);
 			}
-			mainTablePanel->AutoSize = true;
-			mainTablePanel->CellBorderStyle = System::Windows::Forms::TableLayoutPanelCellBorderStyle::InsetDouble;
-			this->Controls->Add(mainTablePanel);
-			
+			baord->AutoSize = true;
+			baord->CellBorderStyle = System::Windows::Forms::TableLayoutPanelCellBorderStyle::InsetDouble;
+			return baord;
+
 		}
 		TableLayoutPanel^ createSmallBoard() {
+
+			TableLayoutPanel^ smallBoard = gcnew System::Windows::Forms::TableLayoutPanel();
 			int const SIZE = 3;
-			TableLayoutPanel^ table = gcnew System::Windows::Forms::TableLayoutPanel();
-			
-			table->ColumnCount = SIZE;
-			table->RowCount = SIZE;
+			smallBoard->ColumnCount = SIZE;
+			smallBoard->RowCount = SIZE;
+
 			for (int i = 0; i < SIZE; i++) {
 				for (int j = 0; j < SIZE; j++) {
-					TextBox^ textBox = gcnew System::Windows::Forms::TextBox();
-					textBox->Width = 20;
-					textBox->Height = 30;
-					table->Controls->Add(textBox, j, i);
-					table->ColumnStyles->Add((gcnew System::Windows::Forms::ColumnStyle()));
-					table->RowStyles->Add((gcnew System::Windows::Forms::ColumnStyle()));
+					TextBox^ field = gcnew System::Windows::Forms::TextBox();
+					field->Width = 20;
+					field->Height = 30;
+					smallBoard->Controls->Add(field, j, i);
+					smallBoard->ColumnStyles->Add((gcnew System::Windows::Forms::ColumnStyle()));
+					smallBoard->RowStyles->Add((gcnew System::Windows::Forms::ColumnStyle()));
 
 				}
 			}
-			table->AutoSize = true;
-			
-			return table;
+			smallBoard->AutoSize = true;
+
+			return smallBoard;
 
 		}
 
-	
+
 	};
 }
