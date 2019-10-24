@@ -1,4 +1,7 @@
 #pragma once
+#include <cliext/vector>
+#include <vector>
+#include <time.h>
 
 namespace Sudoku {
 
@@ -22,6 +25,7 @@ namespace Sudoku {
 			//TODO: Add the constructor code here
 			//
 		}
+		
 
 	protected:
 		/// <summary>
@@ -40,6 +44,8 @@ namespace Sudoku {
 		/// Required designer variable.
 		/// </summary>
 		System::ComponentModel::Container^ components;
+
+		cliext::vector<TextBox^> fields;
 
 #pragma region Windows Form Designer generated code
 		/// <summary>
@@ -60,6 +66,9 @@ namespace Sudoku {
 			this->ResumeLayout(false);
 
 			inicializeBoard();
+			setNumberInFields();
+			randomFields(30);
+			
 		}
 		//	WARNING!!!
 		//after editing MainForm in design view
@@ -71,7 +80,8 @@ namespace Sudoku {
 		}
 
 		TableLayoutPanel^ createBoard() {
-
+			//clear all fields
+			fields.clear();
 			int const SIZE = 3;
 
 			TableLayoutPanel^ baord = gcnew System::Windows::Forms::TableLayoutPanel();
@@ -82,6 +92,7 @@ namespace Sudoku {
 				table->ColumnCount = SIZE;
 				table->RowCount = SIZE;
 
+				
 
 				for (int j = 0; j < SIZE; j++) {
 					table->Controls->Add(createSmallBoard(), j, i);
@@ -103,13 +114,15 @@ namespace Sudoku {
 			int const SIZE = 3;
 			smallBoard->ColumnCount = SIZE;
 			smallBoard->RowCount = SIZE;
-
+			
 			for (int i = 0; i < SIZE; i++) {
 				for (int j = 0; j < SIZE; j++) {
 					TextBox^ field = gcnew System::Windows::Forms::TextBox();
 					field->Width = 20;
 					field->Height = 30;
 					smallBoard->Controls->Add(field, j, i);
+					//add field to vector
+					fields.push_back(field);
 					smallBoard->ColumnStyles->Add((gcnew System::Windows::Forms::ColumnStyle()));
 					smallBoard->RowStyles->Add((gcnew System::Windows::Forms::ColumnStyle()));
 
@@ -120,6 +133,54 @@ namespace Sudoku {
 			return smallBoard;
 
 		}
+		
+		void setNumberInFields() {
+			for (int i = 0; i < 81; i++) {
+				TextBox^ field = fields[i];
+				field->Text = "" + i;
+				field->Enabled = true;
+			}
+		}
+		void clearFields() {
+			for (int i = 0; i < 81; i++) {
+				TextBox^ field = fields[i];
+				field->Text = "";
+				field->Enabled = true;
+			}
+		}
+		void disableFields(cliext::vector<int> indexs) {
+			for (int i = 0; i < indexs.size(); i++) {
+				int id = indexs[i];
+				TextBox^ field = fields[id];
+				field->Enabled = false;
+				field->Text = "R";
+			}
+		}
+		//Easy level	-	38 fields is filled
+		//Medium level	-	30 fields is filled
+		void randomFields(int number) {
+			//this line ensure uniqueness of random numbers
+			//every time when the program starts
+			srand(time(NULL));
+
+			cliext::vector<int> indexs;
+			cliext::vector<int>::iterator it;
+			for (int i = 0; i < number; i++) {
+				int randomInt;
+				while (true) {
+					randomInt = rand() % 81;
+					it = std::find(indexs.begin(), indexs.end(), randomInt);
+					//false if random number is inside indexs
+					if (it == indexs.end()) break;
+				}
+				indexs.push_back(randomInt);
+			}
+			disableFields(indexs);
+			
+		}
+		
+
+	
 
 
 	};
