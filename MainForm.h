@@ -2,7 +2,22 @@
 #include <cliext/vector>
 #include <vector>
 #include <time.h>
+#include "SudokuBoard.h"
 
+using namespace System;
+using namespace System::ComponentModel;
+using namespace System::Collections;
+using namespace System::Windows::Forms;
+using namespace System::Data;
+using namespace System::Drawing;
+using namespace System::Runtime::InteropServices;
+
+namespace Win32 {
+	[DllImport("kernel32.dll", CallingConvention = CallingConvention::StdCall)]
+	int AllocConsole();
+	[DllImport("kernel32.dll", CallingConvention = CallingConvention::StdCall)]
+	int FreeConsole();
+}
 namespace Sudoku {
 
 	using namespace System;
@@ -66,8 +81,16 @@ namespace Sudoku {
 			this->ResumeLayout(false);
 
 			inicializeBoard();
-			setNumberInFields();
-			randomFields(30);
+			SudokuBoard^ board = gcnew SudokuBoard();
+			int rc = Win32::AllocConsole();
+			freopen("CONOUT$", "w", stdout);
+			std::cout << "This works" << std::endl;
+			SudokuBoard^ test = board->getSample();
+
+			std::cout << "test";
+			
+			//setNumberInFields2(test->getSolution);
+			//randomFields(30);
 			
 		}
 		//	WARNING!!!
@@ -133,7 +156,13 @@ namespace Sudoku {
 			return smallBoard;
 
 		}
-		
+		void setNumberInFields2(array< int^ >^ board) {
+			for (int i = 0; i < 81; i++) {
+				TextBox^ field = fields[i];
+				field->Text = ""+board[i];
+				field->Enabled = true;
+			}
+		}
 		void setNumberInFields() {
 			for (int i = 0; i < 81; i++) {
 				TextBox^ field = fields[i];
@@ -178,6 +207,7 @@ namespace Sudoku {
 			disableFields(indexs);
 			
 		}
+
 		
 
 	
