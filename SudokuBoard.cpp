@@ -32,5 +32,6 @@ public:
 		this->board = board;
 	}
 
+
 };
 

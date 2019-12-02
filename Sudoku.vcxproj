@@ -134,6 +134,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MainForm.cpp" />
+    <ClCompile Include="Stopper.cpp" />
     <ClCompile Include="SudokuBoard.cpp" />
   </ItemGroup>
   <ItemGroup>

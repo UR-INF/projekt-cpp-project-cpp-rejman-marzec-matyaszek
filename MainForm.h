@@ -61,6 +61,16 @@ namespace Sudoku {
 		/// </summary>
 		System::ComponentModel::Container^ components;
 
+	private: System::Windows::Forms::MenuStrip^ menuStrip1;
+	private: System::Windows::Forms::ToolStripMenuItem^ fileToolStripMenuItem;
+	private: System::Windows::Forms::ToolStripMenuItem^ newGameToolStripMenuItem;
+	private: System::Windows::Forms::ToolStripMenuItem^ exitToolStripMenuItem;
+	private: System::Windows::Forms::Panel^ innerMainPanel;
+	private: System::Windows::Forms::Panel^ settingsPanel;
+
+	private: System::Windows::Forms::Label^ timeLabel;
+
+
 		cliext::vector<TextBox^> fields;
 
 #pragma region Windows Form Designer generated code
@@ -70,22 +80,93 @@ namespace Sudoku {
 		/// </summary>
 		void InitializeComponent(void)
 		{
+			this->menuStrip1 = (gcnew System::Windows::Forms::MenuStrip());
+			this->fileToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
+			this->newGameToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
+			this->exitToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
+			this->innerMainPanel = (gcnew System::Windows::Forms::Panel());
+			this->settingsPanel = (gcnew System::Windows::Forms::Panel());
+			this->timeLabel = (gcnew System::Windows::Forms::Label());
+			this->menuStrip1->SuspendLayout();
+			this->settingsPanel->SuspendLayout();
 			this->SuspendLayout();
+			// 
+			// menuStrip1
+			// 
+			this->menuStrip1->Items->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(1) { this->fileToolStripMenuItem });
+			this->menuStrip1->Location = System::Drawing::Point(0, 0);
+			this->menuStrip1->Name = L"menuStrip1";
+			this->menuStrip1->Size = System::Drawing::Size(616, 24);
+			this->menuStrip1->TabIndex = 1;
+			this->menuStrip1->Text = L"menuStrip1";
+			// 
+			// fileToolStripMenuItem
+			// 
+			this->fileToolStripMenuItem->DropDownItems->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(2) {
+				this->newGameToolStripMenuItem,
+					this->exitToolStripMenuItem
+			});
+			this->fileToolStripMenuItem->Name = L"fileToolStripMenuItem";
+			this->fileToolStripMenuItem->Size = System::Drawing::Size(37, 20);
+			this->fileToolStripMenuItem->Text = L"File";
+			// 
+			// newGameToolStripMenuItem
+			// 
+			this->newGameToolStripMenuItem->Name = L"newGameToolStripMenuItem";
+			this->newGameToolStripMenuItem->Size = System::Drawing::Size(137, 22);
+			this->newGameToolStripMenuItem->Text = L"New game";
+			this->newGameToolStripMenuItem->Click += gcnew System::EventHandler(this, &MainForm::newGameToolStripMenuItem_Click);
+			// 
+			// exitToolStripMenuItem
+			// 
+			this->exitToolStripMenuItem->Name = L"exitToolStripMenuItem";
+			this->exitToolStripMenuItem->Size = System::Drawing::Size(137, 22);
+			this->exitToolStripMenuItem->Text = L"Result Table";
+			// 
+			// innerMainPanel
+			// 
+			this->innerMainPanel->Location = System::Drawing::Point(22, 54);
+			this->innerMainPanel->Name = L"innerMainPanel";
+			this->innerMainPanel->Size = System::Drawing::Size(375, 347);
+			this->innerMainPanel->TabIndex = 2;
+			// 
+			// settingsPanel
+			// 
+			this->settingsPanel->Controls->Add(this->timeLabel);
+			this->settingsPanel->Location = System::Drawing::Point(428, 54);
+			this->settingsPanel->Name = L"settingsPanel";
+			this->settingsPanel->Size = System::Drawing::Size(150, 347);
+			this->settingsPanel->TabIndex = 3;
+			// 
+			// timeLabel
+			// 
+			this->timeLabel->AutoSize = true;
+			this->timeLabel->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 36, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+				static_cast<System::Byte>(0)));
+			this->timeLabel->Location = System::Drawing::Point(2, 0);
+			this->timeLabel->Name = L"timeLabel";
+			this->timeLabel->Size = System::Drawing::Size(145, 55);
+			this->timeLabel->TabIndex = 0;
+			this->timeLabel->Text = L"00:00";
 			// 
 			// MainForm
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
-			this->ClientSize = System::Drawing::Size(482, 379);
+			this->ClientSize = System::Drawing::Size(616, 447);
+			this->Controls->Add(this->settingsPanel);
+			this->Controls->Add(this->innerMainPanel);
+			this->Controls->Add(this->menuStrip1);
+			this->MainMenuStrip = this->menuStrip1;
 			this->Name = L"MainForm";
 			this->Text = L"MainForm";
+			this->menuStrip1->ResumeLayout(false);
+			this->menuStrip1->PerformLayout();
+			this->settingsPanel->ResumeLayout(false);
+			this->settingsPanel->PerformLayout();
 			this->ResumeLayout(false);
+			this->PerformLayout();
 
-			inicializeBoard();
-			
-			sampleData();
-			
-			
 		}
 		//	WARNING!!!
 		//after editing MainForm in design view
@@ -93,7 +174,7 @@ namespace Sudoku {
 		//so this function must be always credited in InitializeComponent()
 		void inicializeBoard() {
 
-			this->Controls->Add(createBoard());
+			this->innerMainPanel->Controls->Add(createBoard());
 		}
 		void sampleData() {
 			array< int >^ solution = { 1,0,7,0,3,6,2,7,3,4,2,3,4,5,2,3,0,1,2,3,4,5,6,5,6,7,6,7,8,7,6,5,4,5,6,5,6,6,7,0,1,2,3,2,3,4,3,4,5,4,6,5,7,6,7,6,5,4,5,6,5,6,5,5,4,3,4,5,6,5,4,5,4,3,4,3,4,5,4,5,4 };
@@ -126,8 +207,6 @@ namespace Sudoku {
 
 				table->ColumnCount = SIZE;
 				table->RowCount = SIZE;
-
-				
 
 				for (int j = 0; j < SIZE; j++) {
 					table->Controls->Add(createSmallBoard(), j, i);
@@ -224,5 +303,10 @@ namespace Sudoku {
 	
 
 
-	};
+	private: System::Void newGameToolStripMenuItem_Click(System::Object^ sender, System::EventArgs^ e) {
+
+		inicializeBoard();
+		sampleData();
+	}
+};
 }
