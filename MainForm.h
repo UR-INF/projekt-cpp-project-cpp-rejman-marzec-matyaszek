@@ -2,7 +2,7 @@
 #include <cliext/vector>
 #include <vector>
 #include <time.h>
-#include "SudokuBoard.h"
+#include "SudokuBoard.cpp"
 #include <string>
 
 using namespace System;
