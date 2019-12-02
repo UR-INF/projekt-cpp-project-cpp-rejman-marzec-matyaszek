@@ -3,6 +3,7 @@
 #include <vector>
 #include <time.h>
 #include "SudokuBoard.h"
+#include <string>
 
 using namespace System;
 using namespace System::ComponentModel;
@@ -82,14 +83,21 @@ namespace Sudoku {
 
 			inicializeBoard();
 			SudokuBoard^ board = gcnew SudokuBoard();
+
 			int rc = Win32::AllocConsole();
 			freopen("CONOUT$", "w", stdout);
-			std::cout << "This works" << std::endl;
-			SudokuBoard^ test = board->getSample();
+			std::cout << "Console for tests:" << std::endl;
 
-			std::cout << "test";
-			
-			//setNumberInFields2(test->getSolution);
+			array< int >^ testboard = board->getSampleTable();
+
+			array< int >^ solution = {1,0,7,0,3,6,2,7,3,4,2,3,4,5,2,3,0,1,2,3,4,5,6,5,6,7,6,7,8,7,6,5,4,5,6,5,6,6,7,0,1,2,3,2,3,4,3,4,5,4,6,5,7,6,7,6,5,4,5,6,5,6,5,5,4,3,4,5,6,5,4,5,4,3,4,3,4,5,4,5,4};
+			array< int >^ baord = { -1,0,7,0,3,6,2,7,3,4,-2,3,4,5,2,3,-0,1,2,3,4,5,6,5,-6,7,6,-7,8,7,6,5,-4,-5,-6,5,6,6,-7,0,1,2,3,2,3,4,3,4,5,4,6,5,7,6,7,6,5,4,5,6,5,6,5,5,4,3,4,5,6,5,4,5,4,3,4,3,4,5,4,5,4 };
+			std::cout << solution->Length <<std::endl;
+			for (int i = 0; i < solution->Length; i++) {
+				std::cout << i <<". "<<solution[i] << std::endl;
+			}
+			//setNumberInFields();
+			setNumberInFields2(baord);
 			//randomFields(30);
 			
 		}
@@ -156,11 +164,17 @@ namespace Sudoku {
 			return smallBoard;
 
 		}
-		void setNumberInFields2(array< int^ >^ board) {
+		void setNumberInFields2(array< int >^ board) {
 			for (int i = 0; i < 81; i++) {
+
 				TextBox^ field = fields[i];
-				field->Text = ""+board[i];
-				field->Enabled = true;
+				int value = board[i];
+				if (value < 0) field->Enabled = true;
+				else{
+					field->Text = value + "";
+					field->Enabled = false;
+				}
+				
 			}
 		}
 		void setNumberInFields() {
