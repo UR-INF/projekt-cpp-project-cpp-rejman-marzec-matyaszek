@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include <cliext/vector>
 #include <vector>
 #include <time.h>
@@ -82,23 +82,9 @@ namespace Sudoku {
 			this->ResumeLayout(false);
 
 			inicializeBoard();
-			SudokuBoard^ board = gcnew SudokuBoard();
-
-			int rc = Win32::AllocConsole();
-			freopen("CONOUT$", "w", stdout);
-			std::cout << "Console for tests:" << std::endl;
-
-			array< int >^ testboard = board->getSampleTable();
-
-			array< int >^ solution = {1,0,7,0,3,6,2,7,3,4,2,3,4,5,2,3,0,1,2,3,4,5,6,5,6,7,6,7,8,7,6,5,4,5,6,5,6,6,7,0,1,2,3,2,3,4,3,4,5,4,6,5,7,6,7,6,5,4,5,6,5,6,5,5,4,3,4,5,6,5,4,5,4,3,4,3,4,5,4,5,4};
-			array< int >^ baord = { -1,0,7,0,3,6,2,7,3,4,-2,3,4,5,2,3,-0,1,2,3,4,5,6,5,-6,7,6,-7,8,7,6,5,-4,-5,-6,5,6,6,-7,0,1,2,3,2,3,4,3,4,5,4,6,5,7,6,7,6,5,4,5,6,5,6,5,5,4,3,4,5,6,5,4,5,4,3,4,3,4,5,4,5,4 };
-			std::cout << solution->Length <<std::endl;
-			for (int i = 0; i < solution->Length; i++) {
-				std::cout << i <<". "<<solution[i] << std::endl;
-			}
-			//setNumberInFields();
-			setNumberInFields2(baord);
-			//randomFields(30);
+			
+			sampleData();
+			
 			
 		}
 		//	WARNING!!!
@@ -109,7 +95,25 @@ namespace Sudoku {
 
 			this->Controls->Add(createBoard());
 		}
+		void sampleData() {
+			array< int >^ solution = { 1,0,7,0,3,6,2,7,3,4,2,3,4,5,2,3,0,1,2,3,4,5,6,5,6,7,6,7,8,7,6,5,4,5,6,5,6,6,7,0,1,2,3,2,3,4,3,4,5,4,6,5,7,6,7,6,5,4,5,6,5,6,5,5,4,3,4,5,6,5,4,5,4,3,4,3,4,5,4,5,4 };
+			array< int >^ baord = { -1,0,7,0,3,6,2,7,3,4,-2,3,4,5,2,3,-0,1,2,3,4,5,6,5,-6,7,6,-7,8,7,6,5,-4,-5,-6,5,6,6,-7,0,1,2,3,2,3,4,3,4,5,4,6,5,7,6,7,6,5,4,5,6,5,6,5,5,4,3,4,5,6,5,4,5,4,3,4,3,4,5,4,5,4 };
+			//przykładowa tablica sudoku
+			SudokuBoard^ easyLevelTest = gcnew SudokuBoard();
 
+			easyLevelTest->setSolution(solution);
+			easyLevelTest->setBoard(baord);
+
+			//setNumberInFields();
+			setNumberInFields(easyLevelTest->getBoard());
+			//randomFields(30);
+		}
+		void setConsole() {
+			//KONSOLA to jest potrzebne tylko do testów by wyświetlić konsole
+			int rc = Win32::AllocConsole();
+			freopen("CONOUT$", "w", stdout);
+			std::cout << "Console for tests:" << std::endl;
+		}
 		TableLayoutPanel^ createBoard() {
 			//clear all fields
 			fields.clear();
@@ -164,7 +168,7 @@ namespace Sudoku {
 			return smallBoard;
 
 		}
-		void setNumberInFields2(array< int >^ board) {
+		void setNumberInFields(array< int >^ board) {
 			for (int i = 0; i < 81; i++) {
 
 				TextBox^ field = fields[i];
@@ -175,13 +179,6 @@ namespace Sudoku {
 					field->Enabled = false;
 				}
 				
-			}
-		}
-		void setNumberInFields() {
-			for (int i = 0; i < 81; i++) {
-				TextBox^ field = fields[i];
-				field->Text = "" + i;
-				field->Enabled = true;
 			}
 		}
 		void clearFields() {
@@ -201,26 +198,26 @@ namespace Sudoku {
 		}
 		//Easy level	-	38 fields is filled
 		//Medium level	-	30 fields is filled
-		void randomFields(int number) {
-			//this line ensure uniqueness of random numbers
-			//every time when the program starts
-			srand(time(NULL));
+		//void randomFields(int number) {
+		//	//this line ensure uniqueness of random numbers
+		//	//every time when the program starts
+		//	srand(time(NULL));
 
-			cliext::vector<int> indexs;
-			cliext::vector<int>::iterator it;
-			for (int i = 0; i < number; i++) {
-				int randomInt;
-				while (true) {
-					randomInt = rand() % 81;
-					it = std::find(indexs.begin(), indexs.end(), randomInt);
-					//false if random number is inside indexs
-					if (it == indexs.end()) break;
-				}
-				indexs.push_back(randomInt);
-			}
-			disableFields(indexs);
-			
-		}
+		//	cliext::vector<int> indexs;
+		//	cliext::vector<int>::iterator it;
+		//	for (int i = 0; i < number; i++) {
+		//		int randomInt;
+		//		while (true) {
+		//			randomInt = rand() % 81;
+		//			it = std::find(indexs.begin(), indexs.end(), randomInt);
+		//			//false if random number is inside indexs
+		//			if (it == indexs.end()) break;
+		//		}
+		//		indexs.push_back(randomInt);
+		//	}
+		//	disableFields(indexs);
+		//	
+		//}
 
 		
 
