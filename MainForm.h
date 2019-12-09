@@ -4,6 +4,8 @@
 #include <time.h>
 #include "SudokuBoard.cpp"
 #include <string>
+#include <msclr/marshal_cppstd.h>
+
 
 using namespace System;
 using namespace System::ComponentModel;
@@ -69,10 +71,13 @@ namespace Sudoku {
 	private: System::Windows::Forms::Panel^ settingsPanel;
 
 	private: System::Windows::Forms::Label^ timeLabel;
+	private: System::Windows::Forms::Button^ button1;
 
 
-		cliext::vector<TextBox^> fields;
+	cliext::vector<TextBox^> fields;
+	SudokuBoard^ gameBoard;
 
+	
 #pragma region Windows Form Designer generated code
 		/// <summary>
 		/// Required method for Designer support - do not modify
@@ -87,6 +92,7 @@ namespace Sudoku {
 			this->innerMainPanel = (gcnew System::Windows::Forms::Panel());
 			this->settingsPanel = (gcnew System::Windows::Forms::Panel());
 			this->timeLabel = (gcnew System::Windows::Forms::Label());
+			this->button1 = (gcnew System::Windows::Forms::Button());
 			this->menuStrip1->SuspendLayout();
 			this->settingsPanel->SuspendLayout();
 			this->SuspendLayout();
@@ -132,6 +138,7 @@ namespace Sudoku {
 			// 
 			// settingsPanel
 			// 
+			this->settingsPanel->Controls->Add(this->button1);
 			this->settingsPanel->Controls->Add(this->timeLabel);
 			this->settingsPanel->Location = System::Drawing::Point(428, 54);
 			this->settingsPanel->Name = L"settingsPanel";
@@ -148,6 +155,16 @@ namespace Sudoku {
 			this->timeLabel->Size = System::Drawing::Size(145, 55);
 			this->timeLabel->TabIndex = 0;
 			this->timeLabel->Text = L"00:00";
+			// 
+			// button1
+			// 
+			this->button1->Location = System::Drawing::Point(35, 290);
+			this->button1->Name = L"button1";
+			this->button1->Size = System::Drawing::Size(75, 23);
+			this->button1->TabIndex = 1;
+			this->button1->Text = L"End game";
+			this->button1->UseVisualStyleBackColor = true;
+			this->button1->Click += gcnew System::EventHandler(this, &MainForm::button1_Click);
 			// 
 			// MainForm
 			// 
@@ -175,18 +192,20 @@ namespace Sudoku {
 		void inicializeBoard() {
 
 			this->innerMainPanel->Controls->Add(createBoard());
+			SudokuBoard^ easyLevelTest = gcnew SudokuBoard();
+			gameBoard = gcnew SudokuBoard();
 		}
 		void sampleData() {
-			array< int >^ solution = { 1,0,7,0,3,6,2,7,3,4,2,3,4,5,2,3,0,1,2,3,4,5,6,5,6,7,6,7,8,7,6,5,4,5,6,5,6,6,7,0,1,2,3,2,3,4,3,4,5,4,6,5,7,6,7,6,5,4,5,6,5,6,5,5,4,3,4,5,6,5,4,5,4,3,4,3,4,5,4,5,4 };
-			array< int >^ baord = { -1,0,7,0,3,6,2,7,3,4,-2,3,4,5,2,3,-0,1,2,3,4,5,6,5,-6,7,6,-7,8,7,6,5,-4,-5,-6,5,6,6,-7,0,1,2,3,2,3,4,3,4,5,4,6,5,7,6,7,6,5,4,5,6,5,6,5,5,4,3,4,5,6,5,4,5,4,3,4,3,4,5,4,5,4 };
+			array< int >^ solution = { 1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1 };
+			array< int >^ baord = { 1,1,1,1,-1,1,1,1,1,1,1,1,1,1,1,1,-1,1,1,1,1,1,1,1,1,1,-1,1,1,1,1,1,1,1,1,-1,1,1,1,1,1,1,1,1,1,1,1,-1,1,1,1,1,-1,1,1,1,1,-1,1,1,1,1,1,1,-1,1,-1,1,1,1,1,-1,1,-1,1,1,1,-1,1,1,1 };
 			//przykładowa tablica sudoku
-			SudokuBoard^ easyLevelTest = gcnew SudokuBoard();
 
-			easyLevelTest->setSolution(solution);
-			easyLevelTest->setBoard(baord);
+
+			gameBoard->setSolution(solution);
+			gameBoard->setBoard(baord);
 
 			//setNumberInFields();
-			setNumberInFields(easyLevelTest->getBoard());
+			setNumberInFields(gameBoard->getBoard());
 			//randomFields(30);
 		}
 		void setConsole() {
@@ -308,5 +327,53 @@ namespace Sudoku {
 		inicializeBoard();
 		sampleData();
 	}
+	private: array< int >^ fieldsToArray() {
+		//int rc = Win32::AllocConsole();
+		//freopen("CONOUT$", "w", stdout);
+		//std::cout << "Console for tests:" << std::endl;
+		array< int >^ table = gcnew array< int >(81);
+		for (int i = 0; i < 81; i++) {
+			TextBox^ field = fields[i];
+			String^ text = field->Text;
+			std::string unmanaged = msclr::interop::marshal_as<std::string>(text);
+			std::string test = "5";
+			
+			if (unmanaged == "") unmanaged = "99";
+			table[i] = std::stoi(unmanaged);
+		}
+		return table;
+	}
+
+private: System::Void button1_Click(System::Object^ sender, System::EventArgs^ e) {
+	
+	
+	
+	
+	int rc = Win32::AllocConsole();
+	freopen("CONOUT$", "w", stdout);
+	std::cout << "Console for tests:" << std::endl;
+	array< int >^ solution = this->gameBoard->getSolution();
+	array< int >^ actualBoard = fieldsToArray();
+	std::cout << solution->Length << std::endl;
+
+	bool equal = true;
+	for (int i = 0; i < 81; i++) {
+		std::cout <<actualBoard[i]<< "=" <<solution[i]<< std::endl;
+		if (actualBoard[i] == solution[i]) equal = true;
+		else {
+			equal = false;
+			break;
+		}
+	}
+	
+
+	std::string stringPart = "ABC";
+	//int intPart = 10;
+	if (equal) stringPart = "OKEY";
+	std::cout << stringPart << std::endl;
+	//String^ msg = String::Concat("Message", msclr::interop::marshal_as<System::String^>(stringPart));
+	//msg = String::Concat(msg, intPart);
+	//MessageBox::Show(msg);
+}
 };
 }
