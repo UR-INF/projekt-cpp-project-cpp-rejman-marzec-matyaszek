@@ -78,6 +78,9 @@ namespace Sudoku {
 	TableLayoutPanel^ board;
 	cliext::vector<TextBox^> fields;
 	private: System::Windows::Forms::Timer^ timer1;
+	private: System::Windows::Forms::Label^ numberOfTips;
+	private: System::Windows::Forms::Label^ label1;
+	private: System::Windows::Forms::Button^ button2;
 		   SudokuBoard^ gameBoard;
 
 	
@@ -95,6 +98,9 @@ namespace Sudoku {
 			this->exitToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->innerMainPanel = (gcnew System::Windows::Forms::Panel());
 			this->settingsPanel = (gcnew System::Windows::Forms::Panel());
+			this->numberOfTips = (gcnew System::Windows::Forms::Label());
+			this->label1 = (gcnew System::Windows::Forms::Label());
+			this->button2 = (gcnew System::Windows::Forms::Button());
 			this->button1 = (gcnew System::Windows::Forms::Button());
 			this->timeLabel = (gcnew System::Windows::Forms::Label());
 			this->timer1 = (gcnew System::Windows::Forms::Timer(this->components));
@@ -143,6 +149,9 @@ namespace Sudoku {
 			// 
 			// settingsPanel
 			// 
+			this->settingsPanel->Controls->Add(this->numberOfTips);
+			this->settingsPanel->Controls->Add(this->label1);
+			this->settingsPanel->Controls->Add(this->button2);
 			this->settingsPanel->Controls->Add(this->button1);
 			this->settingsPanel->Controls->Add(this->timeLabel);
 			this->settingsPanel->Location = System::Drawing::Point(428, 54);
@@ -150,11 +159,47 @@ namespace Sudoku {
 			this->settingsPanel->Size = System::Drawing::Size(150, 347);
 			this->settingsPanel->TabIndex = 3;
 			// 
+			// numberOfTips
+			// 
+			this->numberOfTips->AutoSize = true;
+			this->numberOfTips->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 14.25F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+				static_cast<System::Byte>(0)));
+			this->numberOfTips->Location = System::Drawing::Point(101, 265);
+			this->numberOfTips->Name = L"numberOfTips";
+			this->numberOfTips->Size = System::Drawing::Size(20, 24);
+			this->numberOfTips->TabIndex = 4;
+			this->numberOfTips->Text = L"0";
+			// 
+			// label1
+			// 
+			this->label1->AutoSize = true;
+			this->label1->Location = System::Drawing::Point(80, 247);
+			this->label1->Name = L"label1";
+			this->label1->Size = System::Drawing::Size(62, 13);
+			this->label1->TabIndex = 3;
+			this->label1->Text = L"Tips to use:";
+			// 
+			// button2
+			// 
+			this->button2->Enabled = false;
+			this->button2->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 12, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+				static_cast<System::Byte>(0)));
+			this->button2->Location = System::Drawing::Point(0, 247);
+			this->button2->Name = L"button2";
+			this->button2->Size = System::Drawing::Size(74, 47);
+			this->button2->TabIndex = 2;
+			this->button2->Text = L"Tip";
+			this->button2->UseVisualStyleBackColor = true;
+			this->button2->Click += gcnew System::EventHandler(this, &MainForm::button2_Click);
+			// 
 			// button1
 			// 
-			this->button1->Location = System::Drawing::Point(35, 290);
+			this->button1->Enabled = false;
+			this->button1->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 12, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+				static_cast<System::Byte>(0)));
+			this->button1->Location = System::Drawing::Point(0, 300);
 			this->button1->Name = L"button1";
-			this->button1->Size = System::Drawing::Size(75, 23);
+			this->button1->Size = System::Drawing::Size(150, 47);
 			this->button1->TabIndex = 1;
 			this->button1->Text = L"End game";
 			this->button1->UseVisualStyleBackColor = true;
@@ -193,7 +238,6 @@ namespace Sudoku {
 			this->settingsPanel->PerformLayout();
 			this->ResumeLayout(false);
 			this->PerformLayout();
-			//inicializeBoard();
 
 		}
 		//	WARNING!!!
@@ -339,6 +383,10 @@ namespace Sudoku {
 
 		min = 0;
 		sec = 0;
+		tips = 10;
+		numberOfTips->Text = Convert::ToString(tips);
+		button1->Enabled = true;
+		button2->Enabled = true;
 		
 		inicializeBoard();
 		//clearFields();
@@ -415,6 +463,26 @@ private: System::Void timer1_Tick(System::Object^ sender, System::EventArgs^ e) 
 	
 
 	timeLabel->Text = minuts +":"+ seconds;
+}
+	   int tips = 10;
+private: System::Void button2_Click(System::Object^ sender, System::EventArgs^ e) {
+
+	
+	TextBox^ field;
+	
+	for (int i = 0; i < 81; i++) {
+		field = fields[i];
+		if (field->Enabled == true & field->Text =="") {
+			int tip = gameBoard->getSolution()[i];
+			field->Text = Convert::ToString(tip);
+			break;
+		}
+	}
+	
+
+	tips--;
+	numberOfTips->Text = Convert::ToString(tips);
+	if (tips == 0) button2->Enabled = false;
 }
 };
 }
