@@ -81,6 +81,7 @@ namespace Sudoku {
 	private: System::Windows::Forms::Label^ numberOfTips;
 	private: System::Windows::Forms::Label^ label1;
 	private: System::Windows::Forms::Button^ button2;
+	private: System::Windows::Forms::ListView^ listView1;
 
 
 
@@ -107,7 +108,9 @@ namespace Sudoku {
 			this->button1 = (gcnew System::Windows::Forms::Button());
 			this->timeLabel = (gcnew System::Windows::Forms::Label());
 			this->timer1 = (gcnew System::Windows::Forms::Timer(this->components));
+			this->listView1 = (gcnew System::Windows::Forms::ListView());
 			this->menuStrip1->SuspendLayout();
+			this->innerMainPanel->SuspendLayout();
 			this->settingsPanel->SuspendLayout();
 			this->SuspendLayout();
 			// 
@@ -146,7 +149,8 @@ namespace Sudoku {
 			// 
 			// innerMainPanel
 			// 
-			this->innerMainPanel->BackColor = System::Drawing::SystemColors::ButtonHighlight;
+			this->innerMainPanel->BackColor = System::Drawing::Color::WhiteSmoke;
+			this->innerMainPanel->Controls->Add(this->listView1);
 			this->innerMainPanel->Location = System::Drawing::Point(22, 54);
 			this->innerMainPanel->Name = L"innerMainPanel";
 			this->innerMainPanel->Size = System::Drawing::Size(352, 363);
@@ -229,6 +233,14 @@ namespace Sudoku {
 			this->timer1->Interval = 1000;
 			this->timer1->Tick += gcnew System::EventHandler(this, &MainForm::timer1_Tick);
 			// 
+			// listView1
+			// 
+			this->listView1->Location = System::Drawing::Point(23, 48);
+			this->listView1->Name = L"listView1";
+			this->listView1->Size = System::Drawing::Size(289, 207);
+			this->listView1->TabIndex = 0;
+			this->listView1->UseCompatibleStateImageBehavior = false;
+			// 
 			// MainForm
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
@@ -243,6 +255,7 @@ namespace Sudoku {
 			this->Text = L"MainForm";
 			this->menuStrip1->ResumeLayout(false);
 			this->menuStrip1->PerformLayout();
+			this->innerMainPanel->ResumeLayout(false);
 			this->settingsPanel->ResumeLayout(false);
 			this->settingsPanel->PerformLayout();
 			this->ResumeLayout(false);
@@ -528,7 +541,7 @@ private: System::Void button2_Click(System::Object^ sender, System::EventArgs^ e
 private: System::Void exitToolStripMenuItem_Click(System::Object^ sender, System::EventArgs^ e) {
 	settingsPanel->Visible = false;
 	innerMainPanel->Controls->Clear();
-	innerMainPanel->BackColor = System::Drawing::Color::White;
+	innerMainPanel->BackColor = System::Drawing::Color::WhiteSmoke;
 }
 
 };
