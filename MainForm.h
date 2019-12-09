@@ -81,6 +81,9 @@ namespace Sudoku {
 	private: System::Windows::Forms::Label^ numberOfTips;
 	private: System::Windows::Forms::Label^ label1;
 	private: System::Windows::Forms::Button^ button2;
+
+
+
 		   SudokuBoard^ gameBoard;
 
 	
@@ -113,7 +116,7 @@ namespace Sudoku {
 			this->menuStrip1->Items->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(1) { this->fileToolStripMenuItem });
 			this->menuStrip1->Location = System::Drawing::Point(0, 0);
 			this->menuStrip1->Name = L"menuStrip1";
-			this->menuStrip1->Size = System::Drawing::Size(616, 24);
+			this->menuStrip1->Size = System::Drawing::Size(548, 24);
 			this->menuStrip1->TabIndex = 1;
 			this->menuStrip1->Text = L"menuStrip1";
 			// 
@@ -139,12 +142,14 @@ namespace Sudoku {
 			this->exitToolStripMenuItem->Name = L"exitToolStripMenuItem";
 			this->exitToolStripMenuItem->Size = System::Drawing::Size(137, 22);
 			this->exitToolStripMenuItem->Text = L"Result Table";
+			this->exitToolStripMenuItem->Click += gcnew System::EventHandler(this, &MainForm::exitToolStripMenuItem_Click);
 			// 
 			// innerMainPanel
 			// 
+			this->innerMainPanel->BackColor = System::Drawing::SystemColors::ButtonHighlight;
 			this->innerMainPanel->Location = System::Drawing::Point(22, 54);
 			this->innerMainPanel->Name = L"innerMainPanel";
-			this->innerMainPanel->Size = System::Drawing::Size(375, 347);
+			this->innerMainPanel->Size = System::Drawing::Size(352, 363);
 			this->innerMainPanel->TabIndex = 2;
 			// 
 			// settingsPanel
@@ -154,9 +159,9 @@ namespace Sudoku {
 			this->settingsPanel->Controls->Add(this->button2);
 			this->settingsPanel->Controls->Add(this->button1);
 			this->settingsPanel->Controls->Add(this->timeLabel);
-			this->settingsPanel->Location = System::Drawing::Point(428, 54);
+			this->settingsPanel->Location = System::Drawing::Point(390, 54);
 			this->settingsPanel->Name = L"settingsPanel";
-			this->settingsPanel->Size = System::Drawing::Size(150, 347);
+			this->settingsPanel->Size = System::Drawing::Size(150, 363);
 			this->settingsPanel->TabIndex = 3;
 			// 
 			// numberOfTips
@@ -164,7 +169,7 @@ namespace Sudoku {
 			this->numberOfTips->AutoSize = true;
 			this->numberOfTips->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 14.25F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(0)));
-			this->numberOfTips->Location = System::Drawing::Point(101, 265);
+			this->numberOfTips->Location = System::Drawing::Point(104, 283);
 			this->numberOfTips->Name = L"numberOfTips";
 			this->numberOfTips->Size = System::Drawing::Size(20, 24);
 			this->numberOfTips->TabIndex = 4;
@@ -173,7 +178,7 @@ namespace Sudoku {
 			// label1
 			// 
 			this->label1->AutoSize = true;
-			this->label1->Location = System::Drawing::Point(80, 247);
+			this->label1->Location = System::Drawing::Point(80, 260);
 			this->label1->Name = L"label1";
 			this->label1->Size = System::Drawing::Size(62, 13);
 			this->label1->TabIndex = 3;
@@ -181,28 +186,31 @@ namespace Sudoku {
 			// 
 			// button2
 			// 
+			this->button2->BackColor = System::Drawing::SystemColors::ControlDark;
 			this->button2->Enabled = false;
 			this->button2->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 12, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(0)));
-			this->button2->Location = System::Drawing::Point(0, 247);
+			this->button2->Location = System::Drawing::Point(0, 260);
 			this->button2->Name = L"button2";
 			this->button2->Size = System::Drawing::Size(74, 47);
 			this->button2->TabIndex = 2;
 			this->button2->Text = L"Tip";
-			this->button2->UseVisualStyleBackColor = true;
+			this->button2->UseVisualStyleBackColor = false;
 			this->button2->Click += gcnew System::EventHandler(this, &MainForm::button2_Click);
 			// 
 			// button1
 			// 
+			this->button1->BackColor = System::Drawing::SystemColors::WindowFrame;
 			this->button1->Enabled = false;
 			this->button1->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 12, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(0)));
-			this->button1->Location = System::Drawing::Point(0, 300);
+			this->button1->ForeColor = System::Drawing::SystemColors::ControlText;
+			this->button1->Location = System::Drawing::Point(0, 313);
 			this->button1->Name = L"button1";
 			this->button1->Size = System::Drawing::Size(150, 47);
 			this->button1->TabIndex = 1;
 			this->button1->Text = L"End game";
-			this->button1->UseVisualStyleBackColor = true;
+			this->button1->UseVisualStyleBackColor = false;
 			this->button1->Click += gcnew System::EventHandler(this, &MainForm::button1_Click);
 			// 
 			// timeLabel
@@ -225,7 +233,8 @@ namespace Sudoku {
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
-			this->ClientSize = System::Drawing::Size(616, 447);
+			this->BackColor = System::Drawing::Color::WhiteSmoke;
+			this->ClientSize = System::Drawing::Size(548, 430);
 			this->Controls->Add(this->settingsPanel);
 			this->Controls->Add(this->innerMainPanel);
 			this->Controls->Add(this->menuStrip1);
@@ -312,8 +321,13 @@ namespace Sudoku {
 			for (int i = 0; i < SIZE; i++) {
 				for (int j = 0; j < SIZE; j++) {
 					TextBox^ field = gcnew System::Windows::Forms::TextBox();
-					field->Width = 20;
-					field->Height = 30;
+					field->Font = gcnew System::Drawing::Font(L"Microsoft Sans Serif", 14.25F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+						static_cast<System::Byte>(0));
+					field->Width = 30;
+					//field->Height = 30;
+					field->BackColor = System::Drawing::Color::White;
+					field->ForeColor = System::Drawing::Color::Black;
+					field->TextAlign = System::Windows::Forms::HorizontalAlignment::Center;
 					smallBoard->Controls->Add(field, j, i);
 					//add field to vector
 					fields.push_back(field);
@@ -332,10 +346,14 @@ namespace Sudoku {
 
 				TextBox^ field = fields[i];
 				int value = board[i];
-				if (value < 0) field->Enabled = true;
+				if (value < 0) {
+					field->Enabled = true;
+					field->BackColor = System::Drawing::Color::White;
+				}
 				else{
 					field->Text = value + "";
 					field->Enabled = false;
+					
 				}
 				
 			}
@@ -381,6 +399,8 @@ namespace Sudoku {
 
 	private: System::Void newGameToolStripMenuItem_Click(System::Object^ sender, System::EventArgs^ e) {
 
+		innerMainPanel->BackColor = System::Drawing::Color::SkyBlue;
+		settingsPanel->Visible = true;
 		min = 0;
 		sec = 0;
 		tips = 10;
@@ -484,5 +504,11 @@ private: System::Void button2_Click(System::Object^ sender, System::EventArgs^ e
 	numberOfTips->Text = Convert::ToString(tips);
 	if (tips == 0) button2->Enabled = false;
 }
+private: System::Void exitToolStripMenuItem_Click(System::Object^ sender, System::EventArgs^ e) {
+	settingsPanel->Visible = false;
+	innerMainPanel->Controls->Clear();
+	innerMainPanel->BackColor = System::Drawing::Color::White;
+}
+
 };
 }
