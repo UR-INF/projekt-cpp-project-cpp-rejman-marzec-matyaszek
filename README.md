@@ -1,1 +1,7 @@
-# projekt-cpp-project-cpp-rejman-marzec-matyaszek
+# Sudoku
+
+## Autorzy
+- Konrad Rejman
+- Mateusz Matyaszek
+- Adam Marzec
+
