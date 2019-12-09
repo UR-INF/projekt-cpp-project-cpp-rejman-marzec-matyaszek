@@ -19,7 +19,7 @@ public:
 	array< int >^ getSolution() {
 		return this->solution;
 	}
-
+	
 	void setSolution(array< int >^ solution) {
 		this->solution = solution;
 	}

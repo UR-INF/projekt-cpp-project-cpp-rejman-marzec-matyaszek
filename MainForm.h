@@ -56,12 +56,14 @@ namespace Sudoku {
 				delete components;
 			}
 		}
+	private: System::ComponentModel::IContainer^ components;
+	protected:
 
 	private:
 		/// <summary>
 		/// Required designer variable.
 		/// </summary>
-		System::ComponentModel::Container^ components;
+
 
 	private: System::Windows::Forms::MenuStrip^ menuStrip1;
 	private: System::Windows::Forms::ToolStripMenuItem^ fileToolStripMenuItem;
@@ -73,9 +75,10 @@ namespace Sudoku {
 	private: System::Windows::Forms::Label^ timeLabel;
 	private: System::Windows::Forms::Button^ button1;
 
-
+	TableLayoutPanel^ board;
 	cliext::vector<TextBox^> fields;
-	SudokuBoard^ gameBoard;
+	private: System::Windows::Forms::Timer^ timer1;
+		   SudokuBoard^ gameBoard;
 
 	
 #pragma region Windows Form Designer generated code
@@ -85,14 +88,16 @@ namespace Sudoku {
 		/// </summary>
 		void InitializeComponent(void)
 		{
+			this->components = (gcnew System::ComponentModel::Container());
 			this->menuStrip1 = (gcnew System::Windows::Forms::MenuStrip());
 			this->fileToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->newGameToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->exitToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->innerMainPanel = (gcnew System::Windows::Forms::Panel());
 			this->settingsPanel = (gcnew System::Windows::Forms::Panel());
-			this->timeLabel = (gcnew System::Windows::Forms::Label());
 			this->button1 = (gcnew System::Windows::Forms::Button());
+			this->timeLabel = (gcnew System::Windows::Forms::Label());
+			this->timer1 = (gcnew System::Windows::Forms::Timer(this->components));
 			this->menuStrip1->SuspendLayout();
 			this->settingsPanel->SuspendLayout();
 			this->SuspendLayout();
@@ -145,6 +150,16 @@ namespace Sudoku {
 			this->settingsPanel->Size = System::Drawing::Size(150, 347);
 			this->settingsPanel->TabIndex = 3;
 			// 
+			// button1
+			// 
+			this->button1->Location = System::Drawing::Point(35, 290);
+			this->button1->Name = L"button1";
+			this->button1->Size = System::Drawing::Size(75, 23);
+			this->button1->TabIndex = 1;
+			this->button1->Text = L"End game";
+			this->button1->UseVisualStyleBackColor = true;
+			this->button1->Click += gcnew System::EventHandler(this, &MainForm::button1_Click);
+			// 
 			// timeLabel
 			// 
 			this->timeLabel->AutoSize = true;
@@ -156,15 +171,10 @@ namespace Sudoku {
 			this->timeLabel->TabIndex = 0;
 			this->timeLabel->Text = L"00:00";
 			// 
-			// button1
+			// timer1
 			// 
-			this->button1->Location = System::Drawing::Point(35, 290);
-			this->button1->Name = L"button1";
-			this->button1->Size = System::Drawing::Size(75, 23);
-			this->button1->TabIndex = 1;
-			this->button1->Text = L"End game";
-			this->button1->UseVisualStyleBackColor = true;
-			this->button1->Click += gcnew System::EventHandler(this, &MainForm::button1_Click);
+			this->timer1->Interval = 1000;
+			this->timer1->Tick += gcnew System::EventHandler(this, &MainForm::timer1_Tick);
 			// 
 			// MainForm
 			// 
@@ -183,6 +193,7 @@ namespace Sudoku {
 			this->settingsPanel->PerformLayout();
 			this->ResumeLayout(false);
 			this->PerformLayout();
+			//inicializeBoard();
 
 		}
 		//	WARNING!!!
@@ -190,8 +201,12 @@ namespace Sudoku {
 		//all stuff in InitializeComponent() are overwritten
 		//so this function must be always credited in InitializeComponent()
 		void inicializeBoard() {
+			innerMainPanel->Controls->Clear();
+			board = createBoard();
+			clearFields();
+			//this->innerMainPanel->Controls->Remove(board);
+			this->innerMainPanel->Controls->Add(board);
 
-			this->innerMainPanel->Controls->Add(createBoard());
 			SudokuBoard^ easyLevelTest = gcnew SudokuBoard();
 			gameBoard = gcnew SudokuBoard();
 		}
@@ -217,6 +232,7 @@ namespace Sudoku {
 		TableLayoutPanel^ createBoard() {
 			//clear all fields
 			fields.clear();
+			//clearFields();
 			int const SIZE = 3;
 
 			TableLayoutPanel^ baord = gcnew System::Windows::Forms::TableLayoutPanel();
@@ -237,7 +253,8 @@ namespace Sudoku {
 				baord->Controls->Add(table);
 			}
 			baord->AutoSize = true;
-			baord->CellBorderStyle = System::Windows::Forms::TableLayoutPanelCellBorderStyle::InsetDouble;
+			baord->CellBorderStyle = System::Windows::Forms::TableLayoutPanelCellBorderStyle::InsetDouble; 
+			
 			return baord;
 
 		}
@@ -317,15 +334,18 @@ namespace Sudoku {
 		//	
 		//}
 
-		
-
-	
-
 
 	private: System::Void newGameToolStripMenuItem_Click(System::Object^ sender, System::EventArgs^ e) {
 
+		min = 0;
+		sec = 0;
+		
 		inicializeBoard();
+		//clearFields();
 		sampleData();
+		timer1->Enabled = true;
+		
+
 	}
 	private: array< int >^ fieldsToArray() {
 		//int rc = Win32::AllocConsole();
@@ -367,10 +387,34 @@ private: System::Void button1_Click(System::Object^ sender, System::EventArgs^ e
 
 	std::string message = "It's not correct answer";
 	//int intPart = 10;
-	if (equal) message = "YOU WON!";
+	if (equal) {
+		message = "YOU WON!";
+		timer1->Enabled = false;
+
+	}
 	//std::cout << message << std::endl;
 	String^ msg = String::Concat(msclr::interop::marshal_as<System::String^>(message));
 	MessageBox::Show(msg);
+}
+	   int sec = 0;
+	   int min = 0;
+private: System::Void timer1_Tick(System::Object^ sender, System::EventArgs^ e) {
+
+	String^ seconds = "";
+	String^ minuts = "";
+	sec++;
+	if (sec == 60) {
+		sec = 0;
+		min++;
+	}
+	if (min <= 9) minuts = "0";
+	minuts += Convert::ToString(min);
+
+	if (sec <= 9) seconds = "0";
+	seconds += Convert::ToString(sec);
+	
+
+	timeLabel->Text = minuts +":"+ seconds;
 }
 };
 }
