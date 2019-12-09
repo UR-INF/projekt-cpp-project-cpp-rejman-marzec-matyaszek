@@ -311,6 +311,20 @@ namespace Sudoku {
 			return baord;
 
 		}
+
+		public: System::Void validate(System::Object^ sender, System::Windows::Forms::KeyPressEventArgs e) {
+			TextBox^ field = (TextBox^)sender;
+			field->Text = "test";
+			//String^ text = field->Text;
+			//int len = text->Length;
+			//if (len > 1) field->Text = "";
+		}
+		private: System::Void validate_KeyPress(System::Object^ sender, System::Windows::Forms::KeyPressEventArgs^ e) {
+			TextBox^ field = (TextBox^) sender;
+			if (!Char::IsDigit(e->KeyChar) && e->KeyChar != 0x08) {
+				e->Handled = true;
+			}
+		}
 		TableLayoutPanel^ createSmallBoard() {
 
 			TableLayoutPanel^ smallBoard = gcnew System::Windows::Forms::TableLayoutPanel();
@@ -328,11 +342,16 @@ namespace Sudoku {
 					field->BackColor = System::Drawing::Color::White;
 					field->ForeColor = System::Drawing::Color::Black;
 					field->TextAlign = System::Windows::Forms::HorizontalAlignment::Center;
+					field->MaxLength = 1;
 					smallBoard->Controls->Add(field, j, i);
 					//add field to vector
 					fields.push_back(field);
 					smallBoard->ColumnStyles->Add((gcnew System::Windows::Forms::ColumnStyle()));
 					smallBoard->RowStyles->Add((gcnew System::Windows::Forms::ColumnStyle()));
+					//field->Click += gcnew System::EventHandler(this, &MainForm::validate);
+					//field->ModifiedChanged += gcnew System::EventHandler(this, &MainForm::validate);
+					field->KeyPress += gcnew System::Windows::Forms::KeyPressEventHandler(this, &MainForm::validate_KeyPress);
+
 
 				}
 			}
@@ -495,6 +514,8 @@ private: System::Void button2_Click(System::Object^ sender, System::EventArgs^ e
 		if (field->Enabled == true & field->Text =="") {
 			int tip = gameBoard->getSolution()[i];
 			field->Text = Convert::ToString(tip);
+			field->BackColor = System::Drawing::Color::LightGreen;
+			field->Enabled = false;
 			break;
 		}
 	}
