@@ -347,18 +347,16 @@ namespace Sudoku {
 private: System::Void button1_Click(System::Object^ sender, System::EventArgs^ e) {
 	
 	
-	
-	
-	int rc = Win32::AllocConsole();
-	freopen("CONOUT$", "w", stdout);
-	std::cout << "Console for tests:" << std::endl;
+	//int rc = Win32::AllocConsole();
+	//freopen("CONOUT$", "w", stdout);
+	//std::cout << "Console for tests:" << std::endl;
 	array< int >^ solution = this->gameBoard->getSolution();
 	array< int >^ actualBoard = fieldsToArray();
 	std::cout << solution->Length << std::endl;
 
 	bool equal = true;
 	for (int i = 0; i < 81; i++) {
-		std::cout <<actualBoard[i]<< "=" <<solution[i]<< std::endl;
+		//std::cout <<actualBoard[i]<< "=" <<solution[i]<< std::endl;
 		if (actualBoard[i] == solution[i]) equal = true;
 		else {
 			equal = false;
@@ -367,13 +365,12 @@ private: System::Void button1_Click(System::Object^ sender, System::EventArgs^ e
 	}
 	
 
-	std::string stringPart = "ABC";
+	std::string message = "It's not correct answer";
 	//int intPart = 10;
-	if (equal) stringPart = "OKEY";
-	std::cout << stringPart << std::endl;
-	//String^ msg = String::Concat("Message", msclr::interop::marshal_as<System::String^>(stringPart));
-	//msg = String::Concat(msg, intPart);
-	//MessageBox::Show(msg);
+	if (equal) message = "YOU WON!";
+	//std::cout << message << std::endl;
+	String^ msg = String::Concat(msclr::interop::marshal_as<System::String^>(message));
+	MessageBox::Show(msg);
 }
 };
 }
