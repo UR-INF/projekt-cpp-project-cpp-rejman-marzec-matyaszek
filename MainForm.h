@@ -85,7 +85,19 @@ namespace Sudoku {
 	private: System::Windows::Forms::ToolStripMenuItem^ easyToolStripMenuItem;
 	private: System::Windows::Forms::ToolStripMenuItem^ mediumToolStripMenuItem;
 	private: System::Windows::Forms::ToolStripMenuItem^ hardToolStripMenuItem;
-	private: System::Windows::Forms::ToolStripMenuItem^ settingsToolStripMenuItem;
+	private: System::Windows::Forms::ToolStripMenuItem^ optionsToolStripMenuItem;
+	private: System::Windows::Forms::ToolStripMenuItem^ timeLimit;
+
+	private: System::Windows::Forms::ToolStripMenuItem^ min1;
+	private: System::Windows::Forms::ToolStripMenuItem^ min3;
+	private: System::Windows::Forms::ToolStripMenuItem^ min5;
+	private: System::Windows::Forms::ToolStripMenuItem^ min10;
+
+
+
+
+
+
 
 
 
@@ -107,6 +119,12 @@ namespace Sudoku {
 			this->mediumToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->hardToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->exitToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
+			this->optionsToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
+			this->timeLimit = (gcnew System::Windows::Forms::ToolStripMenuItem());
+			this->min1 = (gcnew System::Windows::Forms::ToolStripMenuItem());
+			this->min3 = (gcnew System::Windows::Forms::ToolStripMenuItem());
+			this->min5 = (gcnew System::Windows::Forms::ToolStripMenuItem());
+			this->min10 = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->innerMainPanel = (gcnew System::Windows::Forms::Panel());
 			this->listView1 = (gcnew System::Windows::Forms::ListView());
 			this->settingsPanel = (gcnew System::Windows::Forms::Panel());
@@ -116,7 +134,6 @@ namespace Sudoku {
 			this->button1 = (gcnew System::Windows::Forms::Button());
 			this->timeLabel = (gcnew System::Windows::Forms::Label());
 			this->timer1 = (gcnew System::Windows::Forms::Timer(this->components));
-			this->settingsToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->menuStrip1->SuspendLayout();
 			this->innerMainPanel->SuspendLayout();
 			this->settingsPanel->SuspendLayout();
@@ -126,7 +143,7 @@ namespace Sudoku {
 			// 
 			this->menuStrip1->Items->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(2) {
 				this->fileToolStripMenuItem,
-					this->settingsToolStripMenuItem
+					this->optionsToolStripMenuItem
 			});
 			this->menuStrip1->Location = System::Drawing::Point(0, 0);
 			this->menuStrip1->Name = L"menuStrip1";
@@ -151,36 +168,83 @@ namespace Sudoku {
 					this->mediumToolStripMenuItem, this->hardToolStripMenuItem
 			});
 			this->newGameToolStripMenuItem->Name = L"newGameToolStripMenuItem";
-			this->newGameToolStripMenuItem->Size = System::Drawing::Size(180, 22);
+			this->newGameToolStripMenuItem->Size = System::Drawing::Size(137, 22);
 			this->newGameToolStripMenuItem->Text = L"New game";
 			// 
 			// easyToolStripMenuItem
 			// 
 			this->easyToolStripMenuItem->Name = L"easyToolStripMenuItem";
-			this->easyToolStripMenuItem->Size = System::Drawing::Size(180, 22);
+			this->easyToolStripMenuItem->Size = System::Drawing::Size(119, 22);
 			this->easyToolStripMenuItem->Text = L"Easy";
 			this->easyToolStripMenuItem->Click += gcnew System::EventHandler(this, &MainForm::easyToolStripMenuItem_Click);
 			// 
 			// mediumToolStripMenuItem
 			// 
 			this->mediumToolStripMenuItem->Name = L"mediumToolStripMenuItem";
-			this->mediumToolStripMenuItem->Size = System::Drawing::Size(180, 22);
+			this->mediumToolStripMenuItem->Size = System::Drawing::Size(119, 22);
 			this->mediumToolStripMenuItem->Text = L"Medium";
 			this->mediumToolStripMenuItem->Click += gcnew System::EventHandler(this, &MainForm::mediumToolStripMenuItem_Click);
 			// 
 			// hardToolStripMenuItem
 			// 
 			this->hardToolStripMenuItem->Name = L"hardToolStripMenuItem";
-			this->hardToolStripMenuItem->Size = System::Drawing::Size(180, 22);
+			this->hardToolStripMenuItem->Size = System::Drawing::Size(119, 22);
 			this->hardToolStripMenuItem->Text = L"Hard";
 			this->hardToolStripMenuItem->Click += gcnew System::EventHandler(this, &MainForm::hardToolStripMenuItem_Click);
 			// 
 			// exitToolStripMenuItem
 			// 
 			this->exitToolStripMenuItem->Name = L"exitToolStripMenuItem";
-			this->exitToolStripMenuItem->Size = System::Drawing::Size(180, 22);
+			this->exitToolStripMenuItem->Size = System::Drawing::Size(137, 22);
 			this->exitToolStripMenuItem->Text = L"Result Table";
 			this->exitToolStripMenuItem->Click += gcnew System::EventHandler(this, &MainForm::exitToolStripMenuItem_Click);
+			// 
+			// optionsToolStripMenuItem
+			// 
+			this->optionsToolStripMenuItem->DropDownItems->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(1) { this->timeLimit });
+			this->optionsToolStripMenuItem->Name = L"optionsToolStripMenuItem";
+			this->optionsToolStripMenuItem->Size = System::Drawing::Size(61, 20);
+			this->optionsToolStripMenuItem->Text = L"Options";
+			// 
+			// timeLimit
+			// 
+			this->timeLimit->DropDownItems->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(4) {
+				this->min1, this->min3,
+					this->min5, this->min10
+			});
+			this->timeLimit->Name = L"timeLimit";
+			this->timeLimit->Size = System::Drawing::Size(180, 22);
+			this->timeLimit->Text = L"time limit";
+			// 
+			// min1
+			// 
+			this->min1->Name = L"min1";
+			this->min1->Size = System::Drawing::Size(180, 22);
+			this->min1->Text = L"1 min";
+			this->min1->Click += gcnew System::EventHandler(this, &MainForm::min1_Click);
+			// 
+			// min3
+			// 
+			this->min3->Name = L"min3";
+			this->min3->Size = System::Drawing::Size(180, 22);
+			this->min3->Text = L"3 min";
+			this->min3->Click += gcnew System::EventHandler(this, &MainForm::min3_Click);
+			// 
+			// min5
+			// 
+			this->min5->Name = L"min5";
+			this->min5->Size = System::Drawing::Size(180, 22);
+			this->min5->Text = L"5 min";
+			this->min5->Click += gcnew System::EventHandler(this, &MainForm::min5_Click);
+			// 
+			// min10
+			// 
+			this->min10->Checked = true;
+			this->min10->CheckState = System::Windows::Forms::CheckState::Checked;
+			this->min10->Name = L"min10";
+			this->min10->Size = System::Drawing::Size(180, 22);
+			this->min10->Text = L"10 min";
+			this->min10->Click += gcnew System::EventHandler(this, &MainForm::min10_Click);
 			// 
 			// innerMainPanel
 			// 
@@ -275,12 +339,6 @@ namespace Sudoku {
 			// 
 			this->timer1->Interval = 1000;
 			this->timer1->Tick += gcnew System::EventHandler(this, &MainForm::timer1_Tick);
-			// 
-			// settingsToolStripMenuItem
-			// 
-			this->settingsToolStripMenuItem->Name = L"settingsToolStripMenuItem";
-			this->settingsToolStripMenuItem->Size = System::Drawing::Size(61, 20);
-			this->settingsToolStripMenuItem->Text = L"Settings";
 			// 
 			// MainForm
 			// 
@@ -557,6 +615,7 @@ namespace Sudoku {
 		inicializeBoard();
 		//clearFields();
 		timer1->Enabled = true;
+		timeLimit->Enabled = false;
 		
 
 	}
@@ -600,12 +659,14 @@ namespace Sudoku {
 			   if (min == max_time) {
 
 				   timer1->Enabled = false;
+				   timeLimit->Enabled = true;
 				   message = "time is over";
 			   }
 			   //int intPart = 10;
 			   if (equal) {
 				   message = "YOU WON!";
 				   timer1->Enabled = false;
+				   timeLimit->Enabled = true;
 
 			   }
 			   //std::cout << message << std::endl;
@@ -643,9 +704,12 @@ private: System::Void timer1_Tick(System::Object^ sender, System::EventArgs^ e) 
 
 	timeLabel->Text = minuts +":"+ seconds;
 }
+
 	   int tips = 10;
-	   int max_time = 1;
+	   int max_time = 10;
 	   //tip button
+
+	  
 private: System::Void button2_Click(System::Object^ sender, System::EventArgs^ e) {
 
 	
@@ -668,6 +732,8 @@ private: System::Void button2_Click(System::Object^ sender, System::EventArgs^ e
 	if (tips == 0) button2->Enabled = false;
 }
 private: System::Void exitToolStripMenuItem_Click(System::Object^ sender, System::EventArgs^ e) {
+	timer1->Enabled = false;
+	timeLimit->Enabled = true;
 	settingsPanel->Visible = false;
 	innerMainPanel->Controls->Clear();
 	innerMainPanel->BackColor = System::Drawing::Color::WhiteSmoke;
@@ -684,6 +750,34 @@ private: System::Void mediumToolStripMenuItem_Click(System::Object^ sender, Syst
 private: System::Void hardToolStripMenuItem_Click(System::Object^ sender, System::EventArgs^ e) {
 	newGame();
 	setData(2);
+}
+private: System::Void min1_Click(System::Object^ sender, System::EventArgs^ e) {
+	min1->Checked = true;
+	min3->Checked = false;
+	min5->Checked = false;
+	min10->Checked = false;
+	max_time = 1;
+}
+private: System::Void min3_Click(System::Object^ sender, System::EventArgs^ e) {
+	min1->Checked = false;
+	min3->Checked = true;
+	min5->Checked = false;
+	min10->Checked = false;
+	max_time = 3;
+}
+private: System::Void min5_Click(System::Object^ sender, System::EventArgs^ e) {
+	min1->Checked = false;
+	min3->Checked = false;
+	min5->Checked = true;
+	min10->Checked = false;
+	max_time = 5;
+}
+private: System::Void min10_Click(System::Object^ sender, System::EventArgs^ e) {
+	min1->Checked = false;
+	min3->Checked = false;
+	min5->Checked = false;
+	min10->Checked = true;
+	max_time = 10;
 }
 };
 }
