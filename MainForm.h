@@ -82,6 +82,9 @@ namespace Sudoku {
 	private: System::Windows::Forms::Label^ label1;
 	private: System::Windows::Forms::Button^ button2;
 	private: System::Windows::Forms::ListView^ listView1;
+	private: System::Windows::Forms::ToolStripMenuItem^ easyToolStripMenuItem;
+	private: System::Windows::Forms::ToolStripMenuItem^ mediumToolStripMenuItem;
+	private: System::Windows::Forms::ToolStripMenuItem^ hardToolStripMenuItem;
 
 
 
@@ -99,8 +102,12 @@ namespace Sudoku {
 			this->menuStrip1 = (gcnew System::Windows::Forms::MenuStrip());
 			this->fileToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->newGameToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
+			this->easyToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
+			this->mediumToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
+			this->hardToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->exitToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->innerMainPanel = (gcnew System::Windows::Forms::Panel());
+			this->listView1 = (gcnew System::Windows::Forms::ListView());
 			this->settingsPanel = (gcnew System::Windows::Forms::Panel());
 			this->numberOfTips = (gcnew System::Windows::Forms::Label());
 			this->label1 = (gcnew System::Windows::Forms::Label());
@@ -108,7 +115,6 @@ namespace Sudoku {
 			this->button1 = (gcnew System::Windows::Forms::Button());
 			this->timeLabel = (gcnew System::Windows::Forms::Label());
 			this->timer1 = (gcnew System::Windows::Forms::Timer(this->components));
-			this->listView1 = (gcnew System::Windows::Forms::ListView());
 			this->menuStrip1->SuspendLayout();
 			this->innerMainPanel->SuspendLayout();
 			this->settingsPanel->SuspendLayout();
@@ -135,15 +141,39 @@ namespace Sudoku {
 			// 
 			// newGameToolStripMenuItem
 			// 
+			this->newGameToolStripMenuItem->DropDownItems->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(3) {
+				this->easyToolStripMenuItem,
+					this->mediumToolStripMenuItem, this->hardToolStripMenuItem
+			});
 			this->newGameToolStripMenuItem->Name = L"newGameToolStripMenuItem";
-			this->newGameToolStripMenuItem->Size = System::Drawing::Size(137, 22);
+			this->newGameToolStripMenuItem->Size = System::Drawing::Size(180, 22);
 			this->newGameToolStripMenuItem->Text = L"New game";
-			this->newGameToolStripMenuItem->Click += gcnew System::EventHandler(this, &MainForm::newGameToolStripMenuItem_Click);
+			// 
+			// easyToolStripMenuItem
+			// 
+			this->easyToolStripMenuItem->Name = L"easyToolStripMenuItem";
+			this->easyToolStripMenuItem->Size = System::Drawing::Size(180, 22);
+			this->easyToolStripMenuItem->Text = L"Easy";
+			this->easyToolStripMenuItem->Click += gcnew System::EventHandler(this, &MainForm::easyToolStripMenuItem_Click);
+			// 
+			// mediumToolStripMenuItem
+			// 
+			this->mediumToolStripMenuItem->Name = L"mediumToolStripMenuItem";
+			this->mediumToolStripMenuItem->Size = System::Drawing::Size(180, 22);
+			this->mediumToolStripMenuItem->Text = L"Medium";
+			this->mediumToolStripMenuItem->Click += gcnew System::EventHandler(this, &MainForm::mediumToolStripMenuItem_Click);
+			// 
+			// hardToolStripMenuItem
+			// 
+			this->hardToolStripMenuItem->Name = L"hardToolStripMenuItem";
+			this->hardToolStripMenuItem->Size = System::Drawing::Size(180, 22);
+			this->hardToolStripMenuItem->Text = L"Hard";
+			this->hardToolStripMenuItem->Click += gcnew System::EventHandler(this, &MainForm::hardToolStripMenuItem_Click);
 			// 
 			// exitToolStripMenuItem
 			// 
 			this->exitToolStripMenuItem->Name = L"exitToolStripMenuItem";
-			this->exitToolStripMenuItem->Size = System::Drawing::Size(137, 22);
+			this->exitToolStripMenuItem->Size = System::Drawing::Size(180, 22);
 			this->exitToolStripMenuItem->Text = L"Result Table";
 			this->exitToolStripMenuItem->Click += gcnew System::EventHandler(this, &MainForm::exitToolStripMenuItem_Click);
 			// 
@@ -155,6 +185,14 @@ namespace Sudoku {
 			this->innerMainPanel->Name = L"innerMainPanel";
 			this->innerMainPanel->Size = System::Drawing::Size(352, 363);
 			this->innerMainPanel->TabIndex = 2;
+			// 
+			// listView1
+			// 
+			this->listView1->Location = System::Drawing::Point(23, 48);
+			this->listView1->Name = L"listView1";
+			this->listView1->Size = System::Drawing::Size(289, 207);
+			this->listView1->TabIndex = 0;
+			this->listView1->UseCompatibleStateImageBehavior = false;
 			// 
 			// settingsPanel
 			// 
@@ -232,14 +270,6 @@ namespace Sudoku {
 			// 
 			this->timer1->Interval = 1000;
 			this->timer1->Tick += gcnew System::EventHandler(this, &MainForm::timer1_Tick);
-			// 
-			// listView1
-			// 
-			this->listView1->Location = System::Drawing::Point(23, 48);
-			this->listView1->Name = L"listView1";
-			this->listView1->Size = System::Drawing::Size(289, 207);
-			this->listView1->TabIndex = 0;
-			this->listView1->UseCompatibleStateImageBehavior = false;
 			// 
 			// MainForm
 			// 
@@ -501,7 +531,7 @@ namespace Sudoku {
 		//}
 
 
-	private: System::Void newGameToolStripMenuItem_Click(System::Object^ sender, System::EventArgs^ e) {
+	private: void newGame() {
 
 		innerMainPanel->BackColor = System::Drawing::Color::SkyBlue;
 		settingsPanel->Visible = true;
@@ -514,7 +544,6 @@ namespace Sudoku {
 		
 		inicializeBoard();
 		//clearFields();
-		setData(0);
 		timer1->Enabled = true;
 		
 
@@ -616,5 +645,17 @@ private: System::Void exitToolStripMenuItem_Click(System::Object^ sender, System
 	innerMainPanel->BackColor = System::Drawing::Color::WhiteSmoke;
 }
 
+private: System::Void easyToolStripMenuItem_Click(System::Object^ sender, System::EventArgs^ e) {
+	newGame();
+	setData(0);
+}
+private: System::Void mediumToolStripMenuItem_Click(System::Object^ sender, System::EventArgs^ e) {
+	newGame();
+	setData(1);
+}
+private: System::Void hardToolStripMenuItem_Click(System::Object^ sender, System::EventArgs^ e) {
+	newGame();
+	setData(2);
+}
 };
 }
