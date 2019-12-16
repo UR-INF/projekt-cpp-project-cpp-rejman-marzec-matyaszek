@@ -1,4 +1,4 @@
-# Sudoku C++
+# Sudoku
 ### Aplikacja umożliwiająca rozgrywkę Sudoku.
 
 ### Autorzy
