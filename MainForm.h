@@ -5,6 +5,8 @@
 #include "SudokuBoard.cpp"
 #include <string>
 #include <msclr/marshal_cppstd.h>
+#include <fstream>
+#include "Result.h"
 
 
 using namespace System;
@@ -95,7 +97,8 @@ namespace Sudoku {
 	private: System::Windows::Forms::Panel^ savePanel;
 	private: System::Windows::Forms::Label^ label2;
 	private: System::Windows::Forms::Button^ saveButton;
-	private: System::Windows::Forms::TextBox^ textBox1;
+	private: System::Windows::Forms::TextBox^ nameTextBox;
+
 
 
 
@@ -127,7 +130,7 @@ namespace Sudoku {
 			this->savePanel = (gcnew System::Windows::Forms::Panel());
 			this->label2 = (gcnew System::Windows::Forms::Label());
 			this->saveButton = (gcnew System::Windows::Forms::Button());
-			this->textBox1 = (gcnew System::Windows::Forms::TextBox());
+			this->nameTextBox = (gcnew System::Windows::Forms::TextBox());
 			this->settingsPanel = (gcnew System::Windows::Forms::Panel());
 			this->numberOfTips = (gcnew System::Windows::Forms::Label());
 			this->label1 = (gcnew System::Windows::Forms::Label());
@@ -259,7 +262,7 @@ namespace Sudoku {
 			// 
 			this->savePanel->Controls->Add(this->label2);
 			this->savePanel->Controls->Add(this->saveButton);
-			this->savePanel->Controls->Add(this->textBox1);
+			this->savePanel->Controls->Add(this->nameTextBox);
 			this->savePanel->Location = System::Drawing::Point(25, 27);
 			this->savePanel->Name = L"savePanel";
 			this->savePanel->Size = System::Drawing::Size(346, 31);
@@ -282,13 +285,14 @@ namespace Sudoku {
 			this->saveButton->TabIndex = 1;
 			this->saveButton->Text = L"Save";
 			this->saveButton->UseVisualStyleBackColor = true;
+			this->saveButton->Click += gcnew System::EventHandler(this, &MainForm::saveButton_Click);
 			// 
-			// textBox1
+			// nameTextBox
 			// 
-			this->textBox1->Location = System::Drawing::Point(44, 3);
-			this->textBox1->Name = L"textBox1";
-			this->textBox1->Size = System::Drawing::Size(238, 20);
-			this->textBox1->TabIndex = 0;
+			this->nameTextBox->Location = System::Drawing::Point(44, 3);
+			this->nameTextBox->Name = L"nameTextBox";
+			this->nameTextBox->Size = System::Drawing::Size(238, 20);
+			this->nameTextBox->TabIndex = 0;
 			// 
 			// settingsPanel
 			// 
@@ -813,5 +817,67 @@ private: System::Void min10_Click(System::Object^ sender, System::EventArgs^ e) 
 	max_time = 10;
 }
 
+	cliext::vector<Result^> rows;
+
+private: System::Void saveButton_Click(System::Object^ sender, System::EventArgs^ e) {
+	loadResults();
+
+	String^ name = nameTextBox->Text;
+
+	Result^ newResult = gcnew Result(name, Convert::ToString(min), Convert::ToString(sec));
+
+	rows.push_back(newResult);
+
+
+	//std::ofstream file("test", std::ios_base::app);
+	std::ofstream file("rows.txt");
+	for each (Result^ var in rows)
+	{
+		String^ name = var -> name;
+		String^ min = var->min;
+		String^ sec = var->sec;
+		std::string stringName = msclr::interop::marshal_as<std::string>(name);
+		std::string stringMin = msclr::interop::marshal_as<std::string>(min);
+		std::string stringSec = msclr::interop::marshal_as<std::string>(sec);
+		file << stringName <<"-"<< stringMin << ":" << stringSec << std::endl;
+	}
+
+
+	file.close();
+	savePanel->Visible = false;
+
+}
+	   void loadResults() {
+
+		   //int rc = Win32::AllocConsole();
+		   //freopen("CONOUT$", "w", stdout);
+		   //std::cout << "Console for tests:" << std::endl;
+		   rows.clear();
+		   std::ifstream file("rows.txt");
+		   if (file.is_open())
+		   {
+			   std::string row;//maksymalnie 9999 znaków w wierszu
+			   while (getline(file,row) )//dopóki jest co czytać
+			   {
+				   
+				   int id = row.find('-');
+				   std::string name = row.substr(0, id);
+				   std::string min = row.substr(id+1, 2);
+				   std::string sec = row.substr(id + 4, 2);
+				   //String^ min = text->Substring(id, 2);
+				   //String^ sec = text->Substring(id + 3, id + 5);
+				   String^ nameS = "";
+				   
+
+				   Result^ newResult = gcnew Result(String::Concat(msclr::interop::marshal_as<System::String^>(name)) , String::Concat(msclr::interop::marshal_as<System::String^>(min)) , String::Concat(msclr::interop::marshal_as<System::String^>(sec)));
+				   rows.push_back(newResult);
+
+				   //std::cout << name <<"\n"<<min<<"\n"<<sec<< std::endl; //wypisz to co wczytałes z pliku
+				   //lub wykonaj inną operację
+			   }
+		   }
+
+		   file.close();
+	   }
 };
 }
