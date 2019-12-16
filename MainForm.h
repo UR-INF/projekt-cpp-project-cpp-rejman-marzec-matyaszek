@@ -82,6 +82,9 @@ namespace Sudoku {
 	private: System::Windows::Forms::Label^ label1;
 	private: System::Windows::Forms::Button^ button2;
 	private: System::Windows::Forms::ListView^ listView1;
+	private: System::Windows::Forms::ToolStripMenuItem^ easyToolStripMenuItem;
+	private: System::Windows::Forms::ToolStripMenuItem^ mediumToolStripMenuItem;
+	private: System::Windows::Forms::ToolStripMenuItem^ hardToolStripMenuItem;
 
 
 
@@ -99,8 +102,12 @@ namespace Sudoku {
 			this->menuStrip1 = (gcnew System::Windows::Forms::MenuStrip());
 			this->fileToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->newGameToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
+			this->easyToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
+			this->mediumToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
+			this->hardToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->exitToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->innerMainPanel = (gcnew System::Windows::Forms::Panel());
+			this->listView1 = (gcnew System::Windows::Forms::ListView());
 			this->settingsPanel = (gcnew System::Windows::Forms::Panel());
 			this->numberOfTips = (gcnew System::Windows::Forms::Label());
 			this->label1 = (gcnew System::Windows::Forms::Label());
@@ -108,7 +115,6 @@ namespace Sudoku {
 			this->button1 = (gcnew System::Windows::Forms::Button());
 			this->timeLabel = (gcnew System::Windows::Forms::Label());
 			this->timer1 = (gcnew System::Windows::Forms::Timer(this->components));
-			this->listView1 = (gcnew System::Windows::Forms::ListView());
 			this->menuStrip1->SuspendLayout();
 			this->innerMainPanel->SuspendLayout();
 			this->settingsPanel->SuspendLayout();
@@ -135,15 +141,39 @@ namespace Sudoku {
 			// 
 			// newGameToolStripMenuItem
 			// 
+			this->newGameToolStripMenuItem->DropDownItems->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(3) {
+				this->easyToolStripMenuItem,
+					this->mediumToolStripMenuItem, this->hardToolStripMenuItem
+			});
 			this->newGameToolStripMenuItem->Name = L"newGameToolStripMenuItem";
-			this->newGameToolStripMenuItem->Size = System::Drawing::Size(137, 22);
+			this->newGameToolStripMenuItem->Size = System::Drawing::Size(180, 22);
 			this->newGameToolStripMenuItem->Text = L"New game";
-			this->newGameToolStripMenuItem->Click += gcnew System::EventHandler(this, &MainForm::newGameToolStripMenuItem_Click);
+			// 
+			// easyToolStripMenuItem
+			// 
+			this->easyToolStripMenuItem->Name = L"easyToolStripMenuItem";
+			this->easyToolStripMenuItem->Size = System::Drawing::Size(180, 22);
+			this->easyToolStripMenuItem->Text = L"Easy";
+			this->easyToolStripMenuItem->Click += gcnew System::EventHandler(this, &MainForm::easyToolStripMenuItem_Click);
+			// 
+			// mediumToolStripMenuItem
+			// 
+			this->mediumToolStripMenuItem->Name = L"mediumToolStripMenuItem";
+			this->mediumToolStripMenuItem->Size = System::Drawing::Size(180, 22);
+			this->mediumToolStripMenuItem->Text = L"Medium";
+			this->mediumToolStripMenuItem->Click += gcnew System::EventHandler(this, &MainForm::mediumToolStripMenuItem_Click);
+			// 
+			// hardToolStripMenuItem
+			// 
+			this->hardToolStripMenuItem->Name = L"hardToolStripMenuItem";
+			this->hardToolStripMenuItem->Size = System::Drawing::Size(180, 22);
+			this->hardToolStripMenuItem->Text = L"Hard";
+			this->hardToolStripMenuItem->Click += gcnew System::EventHandler(this, &MainForm::hardToolStripMenuItem_Click);
 			// 
 			// exitToolStripMenuItem
 			// 
 			this->exitToolStripMenuItem->Name = L"exitToolStripMenuItem";
-			this->exitToolStripMenuItem->Size = System::Drawing::Size(137, 22);
+			this->exitToolStripMenuItem->Size = System::Drawing::Size(180, 22);
 			this->exitToolStripMenuItem->Text = L"Result Table";
 			this->exitToolStripMenuItem->Click += gcnew System::EventHandler(this, &MainForm::exitToolStripMenuItem_Click);
 			// 
@@ -155,6 +185,14 @@ namespace Sudoku {
 			this->innerMainPanel->Name = L"innerMainPanel";
 			this->innerMainPanel->Size = System::Drawing::Size(352, 363);
 			this->innerMainPanel->TabIndex = 2;
+			// 
+			// listView1
+			// 
+			this->listView1->Location = System::Drawing::Point(23, 48);
+			this->listView1->Name = L"listView1";
+			this->listView1->Size = System::Drawing::Size(289, 207);
+			this->listView1->TabIndex = 0;
+			this->listView1->UseCompatibleStateImageBehavior = false;
 			// 
 			// settingsPanel
 			// 
@@ -233,14 +271,6 @@ namespace Sudoku {
 			this->timer1->Interval = 1000;
 			this->timer1->Tick += gcnew System::EventHandler(this, &MainForm::timer1_Tick);
 			// 
-			// listView1
-			// 
-			this->listView1->Location = System::Drawing::Point(23, 48);
-			this->listView1->Name = L"listView1";
-			this->listView1->Size = System::Drawing::Size(289, 207);
-			this->listView1->TabIndex = 0;
-			this->listView1->UseCompatibleStateImageBehavior = false;
-			// 
 			// MainForm
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
@@ -276,46 +306,90 @@ namespace Sudoku {
 			SudokuBoard^ easyLevelTest = gcnew SudokuBoard();
 			gameBoard = gcnew SudokuBoard();
 		}
-		void sampleData() {
-			array< int >^ solution = { 1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1 };
-			array< int >^ baord = { 1,1,1,1,-1,1,1,1,1,1,1,1,1,1,1,1,-1,1,1,1,1,1,1,1,1,1,-1,1,1,1,1,1,1,1,1,-1,1,1,1,1,1,1,1,1,1,1,1,-1,1,1,1,1,-1,1,1,1,1,-1,1,1,1,1,1,1,-1,1,-1,1,1,1,1,-1,1,-1,1,1,1,-1,1,1,1 };
-			//przykładowa tablica sudoku
-                        // gra łatwa
-			array< int >^ ez_sol_1 = {5, 8, 2, 4, 6, 1, 9, 3, 7, 9, 6, 3, 2, 7, 5, 4, 8, 1, 1, 4, 7, 9, 3, 8, 2, 5, 6, 8, 9, 4, 7, 1, 6, 2, 5, 3, 6, 1, 2, 3, 5, 8, 7, 4, 9, 3, 7, 5, 4, 9, 2, 8, 6, 1, 3, 7, 9, 1, 4, 5, 6, 2, 8, 1, 2, 6, 8, 3, 7, 5, 9, 4, 5, 8, 4, 6, 2, 9, 7, 1, 3};
-			array< int >^ ez_brd_1 = {5, -1, -1, 4, -1, 1, -1, -1, -1, -1, -1, -1, 2, 7, -1, 4, -1, 1, -1, 4, 7, 9, -1, -1, -1, -1, 6, -1, -1, -1, 7, -1, -1, -1, -1, 3, 6, -1, -1, -1, 5, -1, -1, -1, 9, 3, -1, -1, -1, -1, 2, -1, -1, -1, 3, -1, -1, -1, -1, 5, 6, 2, -1, 1, -1, 6, -1, 3, 7, -1, -1, -1, -1, -1, -1, 6, -1, 9, -1, -1, 3};
+		void setEasyLevel() {
 			
-			array< int >^ ez_sol_2 = {8, 3, 9, 2, 5, 4, 6, 7, 1, 7, 5, 1, 6, 3, 8, 4, 2, 9, 2, 4, 6, 1, 9, 7, 3, 5, 8, 5, 6, 8, 4, 2, 3, 9, 1, 7, 9, 1, 3, 8, 6, 7, 2, 4, 5, 4, 7, 2, 9, 1, 5, 8, 6, 3, 3, 8, 5, 7, 4, 6, 1, 9, 2, 1, 7, 4, 3, 9, 2, 5, 8, 6, 6, 2, 9, 5, 8, 1, 7, 3, 4};
-			array< int >^ ez_brd_2 = {-1, -1, -1, 2, -1, -1, -1, -1, 1, 7, 5, -1, -1, -1, -1, -1, -1, 9, -1, 4, -1, -1, -1, 7, 3, 5, 8, -1, -1, 8, 4, 2, -1, 9, -1, -1, -1, 1, -1, -1, -1, -1, -1, 4, -1, -1, -1, 2, -1, 1, 5, 8, -1, -1, 3, 8, 5, 7, -1, -1, -1, 9, -1, 1, -1, -1, -1, -1, -1, -1, 8, 6, 6, -1, -1, -1, -1, 1, -1, -1, -1};
 			
-			array< int >^ ez_sol_3 = {6, 2, 3, 5, 7, 4, 1, 9, 8, 4, 7, 5, 8, 9, 1, 3, 2, 6, 1, 8, 9, 2, 3, 6, 7, 4, 5, 8, 5, 2, 7, 3, 6, 9, 4, 1, 9, 4, 3, 1, 5, 2, 6, 8, 7, 6, 7, 1, 8, 9, 4, 5, 2, 3, 3, 6, 9, 2, 1, 7, 4, 8, 5, 7, 1, 8, 5, 3, 4, 2, 6, 9, 4, 5, 2, 9, 6, 8, 3, 1, 7};
-			array< int >^ ez_brd_3 = {6, -1, 3, 5, -1, -1, 1, 9, -1, 4, -1, -1, 8, 9, -1, -1, 2, -1, 1, -1, -1, 2, 3, -1, -1, 4, -1, -1, -1, -1, -1, -1, 6, 9, 4, -1, 9, -1, 3, -1, 5, -1, 6, -1, 7, -1, 7, 1, 8, -1, -1, -1, -1, -1, -1, 6, -1, -1, 1, 7, -1, -1, 5, -1, 1, -1, -1, 3, 4, -1, -1, 9, -1, 5, 2, -1, -1, 8, 3, -1, 7};
-			
-			// gra średnia
-			array< int >^ md_sol_1 = {3, 5, 7, 1, 6, 8, 2, 4, 9, 9, 2, 8, 3, 4, 5, 1, 6, 7, 1, 6, 4, 7, 2, 9, 8, 5, 3, 8, 7, 2, 4, 3, 1, 6, 9, 5, 5, 3, 1, 2, 9, 6, 7, 8, 4, 4, 9, 6, 5, 8, 7, 3, 1, 2, 5, 1, 6, 9, 2, 4, 7, 8, 3, 4, 7, 9, 8, 1, 3, 6, 5, 2, 2, 3, 8, 6, 7, 5, 9, 4, 1,};
-			array< int >^ md_brd_1 = {-1, -1, 7, 1, 6, 8, -1, -1, -1, 9, -1, 8, -1, -1, -1, 1, -1, 7, 1, 6, -1, -1, -1, -1, -1, 5, 3, -1, 7, -1, -1, 3, -1, -1, -1, 5, -1, -1, 1, -1, -1, -1, -1, 8, 4, 4, -1, 6, -1, -1, 7, -1, -1, -1, 5, -1, 6, 9, -1, 4, -1, 8, 3, -1, -1, -1, 8, 1, -1, 6, 5, -1, 2, 3, -1, -1, 7, -1, -1, -1, 1,};
-			
-			array< int >^ md_sol_2 = {5, 7, 3, 4, 2, 8, 1, 9, 6, 8, 9, 6, 3, 5, 1, 2, 7, 4, 4, 1, 2, 6, 7, 9, 5, 3, 8, 7, 5, 9, 8, 3, 2, 6, 4, 1, 1, 4, 8, 7, 6, 9, 5, 3, 2, 3, 2, 6, 1, 5, 4, 8, 9, 7, 3, 8, 5, 9, 1, 7, 2, 6, 4, 4, 2, 7, 6, 8, 5, 9, 1, 3, 9, 6, 1, 2, 4, 3, 7, 8, 5};
-			array< int >^ md_brd_2 = {-1, 7, -1, -1, 2, -1, -1, -1, 6, -1, -1, 6, 3, 5, 1, 2, 7, 4, 4, 1, -1, -1, 7, -1, -1, 3, -1, 7, -1, -1, 8, 3, 2, -1, -1, -1, -1, -1, -1, 7, -1, 9, 5, 3, 2, 3, -1, 6, -1, -1, -1, -1, -1, -1, 3, 8, -1, -1, 1, 7, -1, -1, -1, -1, -1, -1, 6, 8, 5, 9, -1, -1, 9, -1, -1, 2, -1, -1, 7, -1, 5};
-			
-			array< int >^ md_sol_3 = {4, 8, 5, 9, 1, 3, 6, 2, 7, 2, 9, 7, 5, 6, 8, 1, 4, 3, 6, 3, 1, 2, 4, 7, 9, 8, 5, 8, 6, 2, 5, 9, 4, 3, 7, 1, 3, 7, 4, 8, 1, 6, 9, 5, 2, 5, 1, 9, 7, 2, 3, 4, 6, 8, 7, 5, 8, 2, 3, 9, 1, 4, 6, 6, 2, 1, 4, 8, 5, 7, 3, 9, 3, 9, 4, 1, 7, 6, 8, 5, 2};
-			array< int >^ md_brd_4 = {4, -1, 5, 9, -1, -1, 6, -1, 7, 2, -1, 7, -1, -1, -1, -1, -1, -1, -1, -1, -1, 2, 4, 7, 9, 8, -1, -1, -1, 2, -1, -1, -1, -1, -1, 1, -1, -1, 4, 8, -1, 6, -1, -1, -1, -1, -1, 9, -1, -1, 3, -1, 6, 8, 7, 5, 8, -1, 3, 9, -1, -1, -1, -1, 2, 1, -1, 8, 5, 7, 3, 9, -1, 9, -1, -1, 7, 6, -1, 5, -1};
-			
-			//gra trudna
-			array< int >^ hd_sol_1 = {2, 9, 3, 8, 1, 5, 6, 7, 4, 8, 6, 1, 2, 7, 4, 3, 9, 5, 7, 4, 5, 6, 9, 3, 8, 1, 2, 1, 3, 2, 7, 4, 8, 9, 5, 6, 5, 4, 6, 9, 3, 2, 1, 8, 7, 9, 8, 7, 5, 6, 1, 2, 3, 4, 5, 2, 9, 3, 8, 7, 4, 6, 1, 6, 1, 3, 4, 5, 9, 7, 2, 8, 4, 7, 8, 1, 2, 6, 3, 5, 9};
-			array< int >^ hd_brd_1 = {2, 9, -1, -1, -1, -1, 6, -1, -1, -1, 6, -1, -1, 7, -1, -1, 9, 5, -1, -1, 5, 6, -1, 3, -1, -1, 2, 1, -1, -1, 7, 4, 8, -1, 5, -1, 5, -1, 6, -1, -1, -1, 1, -1, -1, 9, 8, 7, -1, -1, -1, -1, -1, -1, -1, -1, 9, -1, -1, 7, -1, -1, 1, -1, -1, 3, -1, -1, 9, -1, -1, 8, -1, 7, -1, 1, 2, 6, -1, 5, -1};
-			
-			array< int >^ hd_sol_2 = {9, 7, 8, 5, 2, 4, 1, 6, 3, 4, 2, 3, 8, 6, 1, 7, 5, 9, 1, 5, 6, 9, 3, 7, 4, 8, 2, 2, 3, 6, 4, 9, 1, 7, 8, 5, 1, 8, 7, 5, 3, 2, 6, 9, 4, 5, 4, 9, 6, 7, 8, 2, 1, 3, 3, 1, 2, 8, 4, 7, 6, 5, 9, 9, 7, 5, 2, 1, 6, 3, 4, 8, 8, 6, 4, 3, 9, 5, 7, 2, 1};
-			array< int >^ hd_brd_2 = {9, -1, 8, 5, -1, 4, -1, 6, -1, -1, -1, 3, -1, -1, 1, 7, -1, 9, -1, 5, -1, -1, 3, 7, -1, 8, -1, 2, 3, -1, -1, -1, -1, -1, -1, -1, -1, 8, -1, 5, -1, -1, 6, -1, -1, 5, -1, -1, 6, 7, 8, 2, -1, -1, 3, 1, 2, 8, 4, -1, -1, 5, -1, -1, 7, -1, -1, 1, -1, -1, 4, -1, -1, -1, -1, -1, -1, 5, -1, 2, 1};
-			
-			array< int >^ hd_sol_3 = {1, 3, 6, 2, 7, 5, 8, 4, 9, 4, 2, 7, 8, 3, 9, 1, 6, 5, 5, 8, 9, 1, 6, 4, 3, 2, 7, 3, 2, 1, 9, 5, 8, 4, 6, 7, 6, 4, 8, 7, 1, 3, 9, 5, 2, 7, 9, 5, 6, 4, 2, 8, 1, 3, 5, 8, 3, 7, 9, 4, 6, 1, 2, 2, 9, 6, 3, 8, 1, 5, 7, 4, 4, 7, 1, 2, 5, 6, 9, 3, 8}; 
-			array< int >^ hd_brd_3 = { -1, -1, 6, -1, -1, -1, 8, -1, 9, -1, 2, 7, -1, -1, -1, -1, 6, -1, -1, -1, -1, 1, -1, 4, -1, -1, -1, -1, 2, 1, -1, 5, -1, -1, 6, -1, -1, -1, -1, -1, -1, 3, 9, 5, 2, -1, 9, 5, 6, -1, -1, -1, -1, -1, -1, -1, -1, 7, 9, -1, 6, -1, -1, 2, -1, -1, 3, -1, 1, 5, -1, -1, 4, -1, 1, -1, 5, -1, 9, -1, 8 };
-			
-			gameBoard->setSolution(solution);
-			gameBoard->setBoard(baord);
+			array< int >^ ez_sol_1 = { 5, 8, 2, 4, 6, 1, 9, 3, 7, 9, 6, 3, 2, 7, 5, 4, 8, 1, 1, 4, 7, 9, 3, 8, 2, 5, 6, 8, 9, 4, 7, 1, 6, 2, 5, 3, 6, 1, 2, 3, 5, 8, 7, 4, 9, 3, 7, 5, 4, 9, 2, 8, 6, 1, 3, 7, 9, 1, 4, 5, 6, 2, 8, 1, 2, 6, 8, 3, 7, 5, 9, 4, 5, 8, 4, 6, 2, 9, 7, 1, 3 };
+			array< int >^ ez_brd_1 = { 5, -1, -1, 4, -1, 1, -1, -1, -1, -1, -1, -1, 2, 7, -1, 4, -1, 1, -1, 4, 7, 9, -1, -1, -1, -1, 6, -1, -1, -1, 7, -1, -1, -1, -1, 3, 6, -1, -1, -1, 5, -1, -1, -1, 9, 3, -1, -1, -1, -1, 2, -1, -1, -1, 3, -1, -1, -1, -1, 5, 6, 2, -1, 1, -1, 6, -1, 3, 7, -1, -1, -1, -1, -1, -1, 6, -1, 9, -1, -1, 3 };
 
-			//setNumberInFields();
+			array< int >^ ez_sol_2 = { 8, 3, 9, 2, 5, 4, 6, 7, 1, 7, 5, 1, 6, 3, 8, 4, 2, 9, 2, 4, 6, 1, 9, 7, 3, 5, 8, 5, 6, 8, 4, 2, 3, 9, 1, 7, 9, 1, 3, 8, 6, 7, 2, 4, 5, 4, 7, 2, 9, 1, 5, 8, 6, 3, 3, 8, 5, 7, 4, 6, 1, 9, 2, 1, 7, 4, 3, 9, 2, 5, 8, 6, 6, 2, 9, 5, 8, 1, 7, 3, 4 };
+			array< int >^ ez_brd_2 = { -1, -1, -1, 2, -1, -1, -1, -1, 1, 7, 5, -1, -1, -1, -1, -1, -1, 9, -1, 4, -1, -1, -1, 7, 3, 5, 8, -1, -1, 8, 4, 2, -1, 9, -1, -1, -1, 1, -1, -1, -1, -1, -1, 4, -1, -1, -1, 2, -1, 1, 5, 8, -1, -1, 3, 8, 5, 7, -1, -1, -1, 9, -1, 1, -1, -1, -1, -1, -1, -1, 8, 6, 6, -1, -1, -1, -1, 1, -1, -1, -1 };
+
+			array< int >^ ez_sol_3 = { 6, 2, 3, 5, 7, 4, 1, 9, 8, 4, 7, 5, 8, 9, 1, 3, 2, 6, 1, 8, 9, 2, 3, 6, 7, 4, 5, 8, 5, 2, 7, 3, 6, 9, 4, 1, 9, 4, 3, 1, 5, 2, 6, 8, 7, 6, 7, 1, 8, 9, 4, 5, 2, 3, 3, 6, 9, 2, 1, 7, 4, 8, 5, 7, 1, 8, 5, 3, 4, 2, 6, 9, 4, 5, 2, 9, 6, 8, 3, 1, 7 };
+			array< int >^ ez_brd_3 = { 6, -1, 3, 5, -1, -1, 1, 9, -1, 4, -1, -1, 8, 9, -1, -1, 2, -1, 1, -1, -1, 2, 3, -1, -1, 4, -1, -1, -1, -1, -1, -1, 6, 9, 4, -1, 9, -1, 3, -1, 5, -1, 6, -1, 7, -1, 7, 1, 8, -1, -1, -1, -1, -1, -1, 6, -1, -1, 1, 7, -1, -1, 5, -1, 1, -1, -1, 3, 4, -1, -1, 9, -1, 5, 2, -1, -1, 8, 3, -1, 7 };
+
+			array<array<int>^>^ sol = { ez_sol_1, ez_sol_2, ez_sol_3 };
+			array<array<int>^>^ brd = { ez_brd_1, ez_brd_2, ez_brd_3 };
+			int randomInt = rand() % 3;
+			gameBoard->setSolution(sol[randomInt]);
+			gameBoard->setBoard(brd[randomInt]);
+
+			
+		}
+		void setMediumLevel() {
+
+			array< int >^ md_sol_1 = { 3, 5, 7, 1, 6, 8, 2, 4, 9, 9, 2, 8, 3, 4, 5, 1, 6, 7, 1, 6, 4, 7, 2, 9, 8, 5, 3, 8, 7, 2, 4, 3, 1, 6, 9, 5, 5, 3, 1, 2, 9, 6, 7, 8, 4, 4, 9, 6, 5, 8, 7, 3, 1, 2, 5, 1, 6, 9, 2, 4, 7, 8, 3, 4, 7, 9, 8, 1, 3, 6, 5, 2, 2, 3, 8, 6, 7, 5, 9, 4, 1, };
+			array< int >^ md_brd_1 = { -1, -1, 7, 1, 6, 8, -1, -1, -1, 9, -1, 8, -1, -1, -1, 1, -1, 7, 1, 6, -1, -1, -1, -1, -1, 5, 3, -1, 7, -1, -1, 3, -1, -1, -1, 5, -1, -1, 1, -1, -1, -1, -1, 8, 4, 4, -1, 6, -1, -1, 7, -1, -1, -1, 5, -1, 6, 9, -1, 4, -1, 8, 3, -1, -1, -1, 8, 1, -1, 6, 5, -1, 2, 3, -1, -1, 7, -1, -1, -1, 1, };
+
+			array< int >^ md_sol_2 = { 5, 7, 3, 4, 2, 8, 1, 9, 6, 8, 9, 6, 3, 5, 1, 2, 7, 4, 4, 1, 2, 6, 7, 9, 5, 3, 8, 7, 5, 9, 8, 3, 2, 6, 4, 1, 1, 4, 8, 7, 6, 9, 5, 3, 2, 3, 2, 6, 1, 5, 4, 8, 9, 7, 3, 8, 5, 9, 1, 7, 2, 6, 4, 4, 2, 7, 6, 8, 5, 9, 1, 3, 9, 6, 1, 2, 4, 3, 7, 8, 5 };
+			array< int >^ md_brd_2 = { -1, 7, -1, -1, 2, -1, -1, -1, 6, -1, -1, 6, 3, 5, 1, 2, 7, 4, 4, 1, -1, -1, 7, -1, -1, 3, -1, 7, -1, -1, 8, 3, 2, -1, -1, -1, -1, -1, -1, 7, -1, 9, 5, 3, 2, 3, -1, 6, -1, -1, -1, -1, -1, -1, 3, 8, -1, -1, 1, 7, -1, -1, -1, -1, -1, -1, 6, 8, 5, 9, -1, -1, 9, -1, -1, 2, -1, -1, 7, -1, 5 };
+
+			array< int >^ md_sol_3 = { 4, 8, 5, 9, 1, 3, 6, 2, 7, 2, 9, 7, 5, 6, 8, 1, 4, 3, 6, 3, 1, 2, 4, 7, 9, 8, 5, 8, 6, 2, 5, 9, 4, 3, 7, 1, 3, 7, 4, 8, 1, 6, 9, 5, 2, 5, 1, 9, 7, 2, 3, 4, 6, 8, 7, 5, 8, 2, 3, 9, 1, 4, 6, 6, 2, 1, 4, 8, 5, 7, 3, 9, 3, 9, 4, 1, 7, 6, 8, 5, 2 };
+			array< int >^ md_brd_3 = { 4, -1, 5, 9, -1, -1, 6, -1, 7, 2, -1, 7, -1, -1, -1, -1, -1, -1, -1, -1, -1, 2, 4, 7, 9, 8, -1, -1, -1, 2, -1, -1, -1, -1, -1, 1, -1, -1, 4, 8, -1, 6, -1, -1, -1, -1, -1, 9, -1, -1, 3, -1, 6, 8, 7, 5, 8, -1, 3, 9, -1, -1, -1, -1, 2, 1, -1, 8, 5, 7, 3, 9, -1, 9, -1, -1, 7, 6, -1, 5, -1 };
+
+			array<array<int>^>^ sol = { md_sol_1, md_sol_2, md_sol_3 };
+			array<array<int>^>^ brd = { md_brd_1, md_brd_2, md_brd_3 };
+			int randomInt = rand() % 3;
+			gameBoard->setSolution(sol[randomInt]);
+			gameBoard->setBoard(brd[randomInt]);
+
+
+		}
+		void setHardLevel() {
+
+
+			array< int >^ hd_sol_1 = { 2, 9, 3, 8, 1, 5, 6, 7, 4, 8, 6, 1, 2, 7, 4, 3, 9, 5, 7, 4, 5, 6, 9, 3, 8, 1, 2, 1, 3, 2, 7, 4, 8, 9, 5, 6, 5, 4, 6, 9, 3, 2, 1, 8, 7, 9, 8, 7, 5, 6, 1, 2, 3, 4, 5, 2, 9, 3, 8, 7, 4, 6, 1, 6, 1, 3, 4, 5, 9, 7, 2, 8, 4, 7, 8, 1, 2, 6, 3, 5, 9 };
+			array< int >^ hd_brd_1 = { 2, 9, -1, -1, -1, -1, 6, -1, -1, -1, 6, -1, -1, 7, -1, -1, 9, 5, -1, -1, 5, 6, -1, 3, -1, -1, 2, 1, -1, -1, 7, 4, 8, -1, 5, -1, 5, -1, 6, -1, -1, -1, 1, -1, -1, 9, 8, 7, -1, -1, -1, -1, -1, -1, -1, -1, 9, -1, -1, 7, -1, -1, 1, -1, -1, 3, -1, -1, 9, -1, -1, 8, -1, 7, -1, 1, 2, 6, -1, 5, -1 };
+
+			array< int >^ hd_sol_2 = { 9, 7, 8, 5, 2, 4, 1, 6, 3, 4, 2, 3, 8, 6, 1, 7, 5, 9, 1, 5, 6, 9, 3, 7, 4, 8, 2, 2, 3, 6, 4, 9, 1, 7, 8, 5, 1, 8, 7, 5, 3, 2, 6, 9, 4, 5, 4, 9, 6, 7, 8, 2, 1, 3, 3, 1, 2, 8, 4, 7, 6, 5, 9, 9, 7, 5, 2, 1, 6, 3, 4, 8, 8, 6, 4, 3, 9, 5, 7, 2, 1 };
+			array< int >^ hd_brd_2 = { 9, -1, 8, 5, -1, 4, -1, 6, -1, -1, -1, 3, -1, -1, 1, 7, -1, 9, -1, 5, -1, -1, 3, 7, -1, 8, -1, 2, 3, -1, -1, -1, -1, -1, -1, -1, -1, 8, -1, 5, -1, -1, 6, -1, -1, 5, -1, -1, 6, 7, 8, 2, -1, -1, 3, 1, 2, 8, 4, -1, -1, 5, -1, -1, 7, -1, -1, 1, -1, -1, 4, -1, -1, -1, -1, -1, -1, 5, -1, 2, 1 };
+
+			array< int >^ hd_sol_3 = { 1, 3, 6, 2, 7, 5, 8, 4, 9, 4, 2, 7, 8, 3, 9, 1, 6, 5, 5, 8, 9, 1, 6, 4, 3, 2, 7, 3, 2, 1, 9, 5, 8, 4, 6, 7, 6, 4, 8, 7, 1, 3, 9, 5, 2, 7, 9, 5, 6, 4, 2, 8, 1, 3, 5, 8, 3, 7, 9, 4, 6, 1, 2, 2, 9, 6, 3, 8, 1, 5, 7, 4, 4, 7, 1, 2, 5, 6, 9, 3, 8 };
+			array< int >^ hd_brd_3 = { -1, -1, 6, -1, -1, -1, 8, -1, 9, -1, 2, 7, -1, -1, -1, -1, 6, -1, -1, -1, -1, 1, -1, 4, -1, -1, -1, -1, 2, 1, -1, 5, -1, -1, 6, -1, -1, -1, -1, -1, -1, 3, 9, 5, 2, -1, 9, 5, 6, -1, -1, -1, -1, -1, -1, -1, -1, 7, 9, -1, 6, -1, -1, 2, -1, -1, 3, -1, 1, 5, -1, -1, 4, -1, 1, -1, 5, -1, 9, -1, 8 };
+
+			array<array<int>^>^ sol = { hd_sol_1, hd_sol_2, hd_sol_3 };
+			array<array<int>^>^ brd = { hd_brd_1, hd_brd_2, hd_brd_3 };
+			int randomInt = rand() % 3;
+			gameBoard->setSolution(sol[randomInt]);
+			gameBoard->setBoard(brd[randomInt]);
+
+
+		}
+		void setData(int level) {
+			
+
+			switch (level)
+			{
+			case 0:
+				setEasyLevel();
+				break;
+			case 1:
+				setMediumLevel();
+				break;
+			case 2:
+				setHardLevel();
+				break;
+			default:
+				array< int >^ solution = { 1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1 };
+				array< int >^ baord = { 1,1,1,1,-1,1,1,1,1,1,1,1,1,1,1,1,-1,1,1,1,1,1,1,1,1,1,-1,1,1,1,1,1,1,1,1,-1,1,1,1,1,1,1,1,1,1,1,1,-1,1,1,1,1,-1,1,1,1,1,-1,1,1,1,1,1,1,-1,1,-1,1,1,1,1,-1,1,-1,1,1,1,-1,1,1,1 };
+				
+				gameBoard->setSolution(solution);
+				gameBoard->setBoard(baord);
+				break;
+			}
+
 			setNumberInFields(gameBoard->getBoard());
-			//randomFields(30);
+
 		}
 		void setConsole() {
 			//KONSOLA to jest potrzebne tylko do testów by wyświetlić konsole
@@ -457,7 +531,7 @@ namespace Sudoku {
 		//}
 
 
-	private: System::Void newGameToolStripMenuItem_Click(System::Object^ sender, System::EventArgs^ e) {
+	private: void newGame() {
 
 		innerMainPanel->BackColor = System::Drawing::Color::SkyBlue;
 		settingsPanel->Visible = true;
@@ -470,7 +544,6 @@ namespace Sudoku {
 		
 		inicializeBoard();
 		//clearFields();
-		sampleData();
 		timer1->Enabled = true;
 		
 
@@ -572,5 +645,17 @@ private: System::Void exitToolStripMenuItem_Click(System::Object^ sender, System
 	innerMainPanel->BackColor = System::Drawing::Color::WhiteSmoke;
 }
 
+private: System::Void easyToolStripMenuItem_Click(System::Object^ sender, System::EventArgs^ e) {
+	newGame();
+	setData(0);
+}
+private: System::Void mediumToolStripMenuItem_Click(System::Object^ sender, System::EventArgs^ e) {
+	newGame();
+	setData(1);
+}
+private: System::Void hardToolStripMenuItem_Click(System::Object^ sender, System::EventArgs^ e) {
+	newGame();
+	setData(2);
+}
 };
 }
