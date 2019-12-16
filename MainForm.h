@@ -81,7 +81,7 @@ namespace Sudoku {
 	private: System::Windows::Forms::Label^ numberOfTips;
 	private: System::Windows::Forms::Label^ label1;
 	private: System::Windows::Forms::Button^ button2;
-	private: System::Windows::Forms::ListView^ listView1;
+
 	private: System::Windows::Forms::ToolStripMenuItem^ easyToolStripMenuItem;
 	private: System::Windows::Forms::ToolStripMenuItem^ mediumToolStripMenuItem;
 	private: System::Windows::Forms::ToolStripMenuItem^ hardToolStripMenuItem;
@@ -92,12 +92,10 @@ namespace Sudoku {
 	private: System::Windows::Forms::ToolStripMenuItem^ min3;
 	private: System::Windows::Forms::ToolStripMenuItem^ min5;
 	private: System::Windows::Forms::ToolStripMenuItem^ min10;
-
-
-
-
-
-
+	private: System::Windows::Forms::Panel^ savePanel;
+	private: System::Windows::Forms::Label^ label2;
+	private: System::Windows::Forms::Button^ saveButton;
+	private: System::Windows::Forms::TextBox^ textBox1;
 
 
 
@@ -126,7 +124,10 @@ namespace Sudoku {
 			this->min5 = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->min10 = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->innerMainPanel = (gcnew System::Windows::Forms::Panel());
-			this->listView1 = (gcnew System::Windows::Forms::ListView());
+			this->savePanel = (gcnew System::Windows::Forms::Panel());
+			this->label2 = (gcnew System::Windows::Forms::Label());
+			this->saveButton = (gcnew System::Windows::Forms::Button());
+			this->textBox1 = (gcnew System::Windows::Forms::TextBox());
 			this->settingsPanel = (gcnew System::Windows::Forms::Panel());
 			this->numberOfTips = (gcnew System::Windows::Forms::Label());
 			this->label1 = (gcnew System::Windows::Forms::Label());
@@ -135,7 +136,7 @@ namespace Sudoku {
 			this->timeLabel = (gcnew System::Windows::Forms::Label());
 			this->timer1 = (gcnew System::Windows::Forms::Timer(this->components));
 			this->menuStrip1->SuspendLayout();
-			this->innerMainPanel->SuspendLayout();
+			this->savePanel->SuspendLayout();
 			this->settingsPanel->SuspendLayout();
 			this->SuspendLayout();
 			// 
@@ -213,27 +214,27 @@ namespace Sudoku {
 					this->min5, this->min10
 			});
 			this->timeLimit->Name = L"timeLimit";
-			this->timeLimit->Size = System::Drawing::Size(180, 22);
+			this->timeLimit->Size = System::Drawing::Size(125, 22);
 			this->timeLimit->Text = L"time limit";
 			// 
 			// min1
 			// 
 			this->min1->Name = L"min1";
-			this->min1->Size = System::Drawing::Size(180, 22);
+			this->min1->Size = System::Drawing::Size(110, 22);
 			this->min1->Text = L"1 min";
 			this->min1->Click += gcnew System::EventHandler(this, &MainForm::min1_Click);
 			// 
 			// min3
 			// 
 			this->min3->Name = L"min3";
-			this->min3->Size = System::Drawing::Size(180, 22);
+			this->min3->Size = System::Drawing::Size(110, 22);
 			this->min3->Text = L"3 min";
 			this->min3->Click += gcnew System::EventHandler(this, &MainForm::min3_Click);
 			// 
 			// min5
 			// 
 			this->min5->Name = L"min5";
-			this->min5->Size = System::Drawing::Size(180, 22);
+			this->min5->Size = System::Drawing::Size(110, 22);
 			this->min5->Text = L"5 min";
 			this->min5->Click += gcnew System::EventHandler(this, &MainForm::min5_Click);
 			// 
@@ -242,26 +243,52 @@ namespace Sudoku {
 			this->min10->Checked = true;
 			this->min10->CheckState = System::Windows::Forms::CheckState::Checked;
 			this->min10->Name = L"min10";
-			this->min10->Size = System::Drawing::Size(180, 22);
+			this->min10->Size = System::Drawing::Size(110, 22);
 			this->min10->Text = L"10 min";
 			this->min10->Click += gcnew System::EventHandler(this, &MainForm::min10_Click);
 			// 
 			// innerMainPanel
 			// 
 			this->innerMainPanel->BackColor = System::Drawing::Color::WhiteSmoke;
-			this->innerMainPanel->Controls->Add(this->listView1);
-			this->innerMainPanel->Location = System::Drawing::Point(22, 54);
+			this->innerMainPanel->Location = System::Drawing::Point(25, 57);
 			this->innerMainPanel->Name = L"innerMainPanel";
 			this->innerMainPanel->Size = System::Drawing::Size(352, 363);
 			this->innerMainPanel->TabIndex = 2;
 			// 
-			// listView1
+			// savePanel
 			// 
-			this->listView1->Location = System::Drawing::Point(23, 48);
-			this->listView1->Name = L"listView1";
-			this->listView1->Size = System::Drawing::Size(289, 207);
-			this->listView1->TabIndex = 0;
-			this->listView1->UseCompatibleStateImageBehavior = false;
+			this->savePanel->Controls->Add(this->label2);
+			this->savePanel->Controls->Add(this->saveButton);
+			this->savePanel->Controls->Add(this->textBox1);
+			this->savePanel->Location = System::Drawing::Point(25, 27);
+			this->savePanel->Name = L"savePanel";
+			this->savePanel->Size = System::Drawing::Size(346, 31);
+			this->savePanel->TabIndex = 1;
+			// 
+			// label2
+			// 
+			this->label2->AutoSize = true;
+			this->label2->Location = System::Drawing::Point(3, 6);
+			this->label2->Name = L"label2";
+			this->label2->Size = System::Drawing::Size(35, 13);
+			this->label2->TabIndex = 2;
+			this->label2->Text = L"Name";
+			// 
+			// saveButton
+			// 
+			this->saveButton->Location = System::Drawing::Point(288, 1);
+			this->saveButton->Name = L"saveButton";
+			this->saveButton->Size = System::Drawing::Size(52, 23);
+			this->saveButton->TabIndex = 1;
+			this->saveButton->Text = L"Save";
+			this->saveButton->UseVisualStyleBackColor = true;
+			// 
+			// textBox1
+			// 
+			this->textBox1->Location = System::Drawing::Point(44, 3);
+			this->textBox1->Name = L"textBox1";
+			this->textBox1->Size = System::Drawing::Size(238, 20);
+			this->textBox1->TabIndex = 0;
 			// 
 			// settingsPanel
 			// 
@@ -345,7 +372,8 @@ namespace Sudoku {
 			this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
 			this->BackColor = System::Drawing::Color::WhiteSmoke;
-			this->ClientSize = System::Drawing::Size(548, 430);
+			this->ClientSize = System::Drawing::Size(548, 437);
+			this->Controls->Add(this->savePanel);
 			this->Controls->Add(this->settingsPanel);
 			this->Controls->Add(this->innerMainPanel);
 			this->Controls->Add(this->menuStrip1);
@@ -354,7 +382,8 @@ namespace Sudoku {
 			this->Text = L"MainForm";
 			this->menuStrip1->ResumeLayout(false);
 			this->menuStrip1->PerformLayout();
-			this->innerMainPanel->ResumeLayout(false);
+			this->savePanel->ResumeLayout(false);
+			this->savePanel->PerformLayout();
 			this->settingsPanel->ResumeLayout(false);
 			this->settingsPanel->PerformLayout();
 			this->ResumeLayout(false);
@@ -604,7 +633,7 @@ namespace Sudoku {
 
 
 	private: void newGame() {
-
+		savePanel->Visible = false;
 		innerMainPanel->BackColor = System::Drawing::Color::SkyBlue;
 		settingsPanel->Visible = true;
 		min = 0;
@@ -661,17 +690,20 @@ namespace Sudoku {
 				   timer1->Enabled = false;
 				   timeLimit->Enabled = true;
 				   message = "time is over";
+				   
 			   }
 			   //int intPart = 10;
 			   if (equal) {
 				   message = "YOU WON!";
 				   timer1->Enabled = false;
 				   timeLimit->Enabled = true;
+				   savePanel->Visible = true;
 
 			   }
 			   //std::cout << message << std::endl;
 			   String^ msg = String::Concat(msclr::interop::marshal_as<System::String^>(message));
 			   MessageBox::Show(msg);
+
 		   }
 private: System::Void button1_Click(System::Object^ sender, System::EventArgs^ e) {
 	judge();
@@ -732,6 +764,7 @@ private: System::Void button2_Click(System::Object^ sender, System::EventArgs^ e
 	if (tips == 0) button2->Enabled = false;
 }
 private: System::Void exitToolStripMenuItem_Click(System::Object^ sender, System::EventArgs^ e) {
+	savePanel->Visible = false;
 	timer1->Enabled = false;
 	timeLimit->Enabled = true;
 	settingsPanel->Visible = false;
@@ -741,7 +774,7 @@ private: System::Void exitToolStripMenuItem_Click(System::Object^ sender, System
 
 private: System::Void easyToolStripMenuItem_Click(System::Object^ sender, System::EventArgs^ e) {
 	newGame();
-	setData(0);
+	setData(44);
 }
 private: System::Void mediumToolStripMenuItem_Click(System::Object^ sender, System::EventArgs^ e) {
 	newGame();
@@ -779,5 +812,6 @@ private: System::Void min10_Click(System::Object^ sender, System::EventArgs^ e) 
 	min10->Checked = true;
 	max_time = 10;
 }
+
 };
 }
