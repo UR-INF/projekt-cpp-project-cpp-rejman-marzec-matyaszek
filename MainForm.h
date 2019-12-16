@@ -794,8 +794,10 @@ private: System::Void button2_Click(System::Object^ sender, System::EventArgs^ e
 
 		   innerMainPanel->Controls->Add(textArea);
 		   textArea->Clear();
+		   int index = 1;
 		   for each (Result ^ elem in rows)
 		   {
+			   textArea->Text += index + ".\t";
 			   textArea->Text += elem->name;
 			   textArea->Text += "\t\t\t\t";
 			   textArea->Text += elem->min;
@@ -803,6 +805,7 @@ private: System::Void button2_Click(System::Object^ sender, System::EventArgs^ e
 			   textArea->Text += elem->sec;
 			   //textArea->Text += elem->time();
 			   textArea->Text += "\n";
+			   index++;
 		   }
 	   }
 	   void sortRows() {
@@ -817,9 +820,9 @@ private: System::Void button2_Click(System::Object^ sender, System::EventArgs^ e
 		   }
 		   rows = sorted;
 
-		   int rc = Win32::AllocConsole();
-		   freopen("CONOUT$", "w", stdout);
-		   std::cout << "Console for tests:" << std::endl;
+		   //int rc = Win32::AllocConsole();
+		   //freopen("CONOUT$", "w", stdout);
+		   //std::cout << "Console for tests:" << std::endl;
 
 		   for each (Result^ elem in sorted)
 		   {
