@@ -16,13 +16,15 @@ public:
 	String^ name;
 	String^ min;
 	String^ sec;
+	int level;
 
 
 public:
 
 	
-	Result(String^ name, String^ min, String^ sec)
+	Result(String^ name, String^ min, String^ sec, int level)
 	{
+		this->level = level;
 		this->name = name;
 		if (min->Length == 1) min = "0" + min;
 		this->min = min;
