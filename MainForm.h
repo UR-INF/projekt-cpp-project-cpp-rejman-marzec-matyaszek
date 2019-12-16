@@ -440,7 +440,7 @@ namespace Sudoku {
 			this->Controls->Add(this->menuStrip1);
 			this->MainMenuStrip = this->menuStrip1;
 			this->Name = L"MainForm";
-			this->Text = L"MainForm";
+			this->Text = L"Sudoku";
 			this->menuStrip1->ResumeLayout(false);
 			this->menuStrip1->PerformLayout();
 			this->innerMainPanel->ResumeLayout(false);
@@ -904,7 +904,7 @@ private: System::Void exitToolStripMenuItem_Click(System::Object^ sender, System
 
 private: System::Void easyToolStripMenuItem_Click(System::Object^ sender, System::EventArgs^ e) {
 	newGame();
-	setData(44);
+	setData(0);
 }
 private: System::Void mediumToolStripMenuItem_Click(System::Object^ sender, System::EventArgs^ e) {
 	newGame();
