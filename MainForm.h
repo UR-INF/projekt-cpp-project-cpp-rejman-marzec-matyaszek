@@ -98,6 +98,7 @@ namespace Sudoku {
 	private: System::Windows::Forms::Label^ label2;
 	private: System::Windows::Forms::Button^ saveButton;
 	private: System::Windows::Forms::TextBox^ nameTextBox;
+	private: System::Windows::Forms::RichTextBox^ textArea;
 
 
 
@@ -138,7 +139,9 @@ namespace Sudoku {
 			this->button1 = (gcnew System::Windows::Forms::Button());
 			this->timeLabel = (gcnew System::Windows::Forms::Label());
 			this->timer1 = (gcnew System::Windows::Forms::Timer(this->components));
+			this->textArea = (gcnew System::Windows::Forms::RichTextBox());
 			this->menuStrip1->SuspendLayout();
+			this->innerMainPanel->SuspendLayout();
 			this->savePanel->SuspendLayout();
 			this->settingsPanel->SuspendLayout();
 			this->SuspendLayout();
@@ -172,7 +175,7 @@ namespace Sudoku {
 					this->mediumToolStripMenuItem, this->hardToolStripMenuItem
 			});
 			this->newGameToolStripMenuItem->Name = L"newGameToolStripMenuItem";
-			this->newGameToolStripMenuItem->Size = System::Drawing::Size(137, 22);
+			this->newGameToolStripMenuItem->Size = System::Drawing::Size(180, 22);
 			this->newGameToolStripMenuItem->Text = L"New game";
 			// 
 			// easyToolStripMenuItem
@@ -199,7 +202,7 @@ namespace Sudoku {
 			// exitToolStripMenuItem
 			// 
 			this->exitToolStripMenuItem->Name = L"exitToolStripMenuItem";
-			this->exitToolStripMenuItem->Size = System::Drawing::Size(137, 22);
+			this->exitToolStripMenuItem->Size = System::Drawing::Size(180, 22);
 			this->exitToolStripMenuItem->Text = L"Result Table";
 			this->exitToolStripMenuItem->Click += gcnew System::EventHandler(this, &MainForm::exitToolStripMenuItem_Click);
 			// 
@@ -253,6 +256,7 @@ namespace Sudoku {
 			// innerMainPanel
 			// 
 			this->innerMainPanel->BackColor = System::Drawing::Color::WhiteSmoke;
+			this->innerMainPanel->Controls->Add(this->textArea);
 			this->innerMainPanel->Location = System::Drawing::Point(25, 57);
 			this->innerMainPanel->Name = L"innerMainPanel";
 			this->innerMainPanel->Size = System::Drawing::Size(352, 363);
@@ -371,6 +375,14 @@ namespace Sudoku {
 			this->timer1->Interval = 1000;
 			this->timer1->Tick += gcnew System::EventHandler(this, &MainForm::timer1_Tick);
 			// 
+			// textArea
+			// 
+			this->textArea->Location = System::Drawing::Point(6, 7);
+			this->textArea->Name = L"textArea";
+			this->textArea->Size = System::Drawing::Size(340, 350);
+			this->textArea->TabIndex = 0;
+			this->textArea->Text = L"";
+			// 
 			// MainForm
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
@@ -386,13 +398,14 @@ namespace Sudoku {
 			this->Text = L"MainForm";
 			this->menuStrip1->ResumeLayout(false);
 			this->menuStrip1->PerformLayout();
+			this->innerMainPanel->ResumeLayout(false);
 			this->savePanel->ResumeLayout(false);
 			this->savePanel->PerformLayout();
 			this->settingsPanel->ResumeLayout(false);
 			this->settingsPanel->PerformLayout();
 			this->ResumeLayout(false);
 			this->PerformLayout();
-
+			showList();
 		}
 		//	WARNING!!!
 		//after editing MainForm in design view
@@ -767,13 +780,30 @@ private: System::Void button2_Click(System::Object^ sender, System::EventArgs^ e
 	numberOfTips->Text = Convert::ToString(tips);
 	if (tips == 0) button2->Enabled = false;
 }
+	   void showList() {
+		   savePanel->Visible = false;
+		   timer1->Enabled = false;
+		   timeLimit->Enabled = true;
+		   settingsPanel->Visible = false;
+		   innerMainPanel->Controls->Clear();
+		   innerMainPanel->BackColor = System::Drawing::Color::WhiteSmoke;
+
+		   loadResults();
+
+		   innerMainPanel->Controls->Add(textArea);
+		   textArea->Clear();
+		   for each (Result ^ elem in rows)
+		   {
+			   textArea->Text += elem->name;
+			   textArea->Text += "\t\t\t\t";
+			   textArea->Text += elem->min;
+			   textArea->Text += ":";
+			   textArea->Text += elem->sec;
+			   textArea->Text += "\n";
+		   }
+	   }
 private: System::Void exitToolStripMenuItem_Click(System::Object^ sender, System::EventArgs^ e) {
-	savePanel->Visible = false;
-	timer1->Enabled = false;
-	timeLimit->Enabled = true;
-	settingsPanel->Visible = false;
-	innerMainPanel->Controls->Clear();
-	innerMainPanel->BackColor = System::Drawing::Color::WhiteSmoke;
+	showList();
 }
 
 private: System::Void easyToolStripMenuItem_Click(System::Object^ sender, System::EventArgs^ e) {
