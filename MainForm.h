@@ -5,7 +5,10 @@
 #include "SudokuBoard.cpp"
 #include <string>
 #include <msclr/marshal_cppstd.h>
-
+#include <fstream>
+#include "Result.h"
+#include <algorithm>
+#include <list>
 
 using namespace System;
 using namespace System::ComponentModel;
@@ -44,7 +47,7 @@ namespace Sudoku {
 			//
 		}
 		
-
+		
 	protected:
 		/// <summary>
 		/// Clean up any resources being used.
@@ -95,7 +98,15 @@ namespace Sudoku {
 	private: System::Windows::Forms::Panel^ savePanel;
 	private: System::Windows::Forms::Label^ label2;
 	private: System::Windows::Forms::Button^ saveButton;
-	private: System::Windows::Forms::TextBox^ textBox1;
+	private: System::Windows::Forms::TextBox^ nameTextBox;
+	private: System::Windows::Forms::RichTextBox^ textArea;
+	private: System::Windows::Forms::Button^ hardButton;
+
+	private: System::Windows::Forms::Button^ mediumButton;
+
+	private: System::Windows::Forms::Button^ easyButton;
+
+
 
 
 
@@ -124,10 +135,14 @@ namespace Sudoku {
 			this->min5 = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->min10 = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->innerMainPanel = (gcnew System::Windows::Forms::Panel());
+			this->hardButton = (gcnew System::Windows::Forms::Button());
+			this->mediumButton = (gcnew System::Windows::Forms::Button());
+			this->easyButton = (gcnew System::Windows::Forms::Button());
+			this->textArea = (gcnew System::Windows::Forms::RichTextBox());
 			this->savePanel = (gcnew System::Windows::Forms::Panel());
 			this->label2 = (gcnew System::Windows::Forms::Label());
 			this->saveButton = (gcnew System::Windows::Forms::Button());
-			this->textBox1 = (gcnew System::Windows::Forms::TextBox());
+			this->nameTextBox = (gcnew System::Windows::Forms::TextBox());
 			this->settingsPanel = (gcnew System::Windows::Forms::Panel());
 			this->numberOfTips = (gcnew System::Windows::Forms::Label());
 			this->label1 = (gcnew System::Windows::Forms::Label());
@@ -136,6 +151,7 @@ namespace Sudoku {
 			this->timeLabel = (gcnew System::Windows::Forms::Label());
 			this->timer1 = (gcnew System::Windows::Forms::Timer(this->components));
 			this->menuStrip1->SuspendLayout();
+			this->innerMainPanel->SuspendLayout();
 			this->savePanel->SuspendLayout();
 			this->settingsPanel->SuspendLayout();
 			this->SuspendLayout();
@@ -250,20 +266,64 @@ namespace Sudoku {
 			// innerMainPanel
 			// 
 			this->innerMainPanel->BackColor = System::Drawing::Color::WhiteSmoke;
+			this->innerMainPanel->Controls->Add(this->hardButton);
+			this->innerMainPanel->Controls->Add(this->mediumButton);
+			this->innerMainPanel->Controls->Add(this->easyButton);
+			this->innerMainPanel->Controls->Add(this->textArea);
 			this->innerMainPanel->Location = System::Drawing::Point(25, 57);
 			this->innerMainPanel->Name = L"innerMainPanel";
 			this->innerMainPanel->Size = System::Drawing::Size(352, 363);
 			this->innerMainPanel->TabIndex = 2;
 			// 
+			// hardButton
+			// 
+			this->hardButton->Location = System::Drawing::Point(168, 0);
+			this->hardButton->Name = L"hardButton";
+			this->hardButton->Size = System::Drawing::Size(75, 23);
+			this->hardButton->TabIndex = 3;
+			this->hardButton->Text = L"hard";
+			this->hardButton->UseVisualStyleBackColor = true;
+			this->hardButton->Click += gcnew System::EventHandler(this, &MainForm::hardButton_Click);
+			// 
+			// mediumButton
+			// 
+			this->mediumButton->Location = System::Drawing::Point(87, 0);
+			this->mediumButton->Name = L"mediumButton";
+			this->mediumButton->Size = System::Drawing::Size(75, 23);
+			this->mediumButton->TabIndex = 2;
+			this->mediumButton->Text = L"medium";
+			this->mediumButton->UseVisualStyleBackColor = true;
+			this->mediumButton->Click += gcnew System::EventHandler(this, &MainForm::mediumButton_Click);
+			// 
+			// easyButton
+			// 
+			this->easyButton->Location = System::Drawing::Point(6, 0);
+			this->easyButton->Name = L"easyButton";
+			this->easyButton->Size = System::Drawing::Size(75, 23);
+			this->easyButton->TabIndex = 1;
+			this->easyButton->Text = L"easy";
+			this->easyButton->UseVisualStyleBackColor = true;
+			this->easyButton->Click += gcnew System::EventHandler(this, &MainForm::easyButton_Click);
+			// 
+			// textArea
+			// 
+			this->textArea->Location = System::Drawing::Point(6, 26);
+			this->textArea->Name = L"textArea";
+			this->textArea->ReadOnly = true;
+			this->textArea->Size = System::Drawing::Size(340, 331);
+			this->textArea->TabIndex = 0;
+			this->textArea->Text = L"";
+			// 
 			// savePanel
 			// 
 			this->savePanel->Controls->Add(this->label2);
 			this->savePanel->Controls->Add(this->saveButton);
-			this->savePanel->Controls->Add(this->textBox1);
+			this->savePanel->Controls->Add(this->nameTextBox);
 			this->savePanel->Location = System::Drawing::Point(25, 27);
 			this->savePanel->Name = L"savePanel";
 			this->savePanel->Size = System::Drawing::Size(346, 31);
 			this->savePanel->TabIndex = 1;
+			this->savePanel->Visible = false;
 			// 
 			// label2
 			// 
@@ -282,13 +342,14 @@ namespace Sudoku {
 			this->saveButton->TabIndex = 1;
 			this->saveButton->Text = L"Save";
 			this->saveButton->UseVisualStyleBackColor = true;
+			this->saveButton->Click += gcnew System::EventHandler(this, &MainForm::saveButton_Click);
 			// 
-			// textBox1
+			// nameTextBox
 			// 
-			this->textBox1->Location = System::Drawing::Point(44, 3);
-			this->textBox1->Name = L"textBox1";
-			this->textBox1->Size = System::Drawing::Size(238, 20);
-			this->textBox1->TabIndex = 0;
+			this->nameTextBox->Location = System::Drawing::Point(44, 3);
+			this->nameTextBox->Name = L"nameTextBox";
+			this->nameTextBox->Size = System::Drawing::Size(238, 20);
+			this->nameTextBox->TabIndex = 0;
 			// 
 			// settingsPanel
 			// 
@@ -382,13 +443,14 @@ namespace Sudoku {
 			this->Text = L"MainForm";
 			this->menuStrip1->ResumeLayout(false);
 			this->menuStrip1->PerformLayout();
+			this->innerMainPanel->ResumeLayout(false);
 			this->savePanel->ResumeLayout(false);
 			this->savePanel->PerformLayout();
 			this->settingsPanel->ResumeLayout(false);
 			this->settingsPanel->PerformLayout();
 			this->ResumeLayout(false);
 			this->PerformLayout();
-
+			showList(3);
 		}
 		//	WARNING!!!
 		//after editing MainForm in design view
@@ -471,12 +533,15 @@ namespace Sudoku {
 			switch (level)
 			{
 			case 0:
+				level = 1;
 				setEasyLevel();
 				break;
 			case 1:
+				level = 2;
 				setMediumLevel();
 				break;
 			case 2:
+				level = 3;
 				setHardLevel();
 				break;
 			default:
@@ -684,7 +749,7 @@ namespace Sudoku {
 			   }
 			   
 
-			   std::string message = "It's not correct answer";
+			   std::string message = "this is not the correct answer";
 			   if (min == max_time) {
 
 				   timer1->Enabled = false;
@@ -763,13 +828,78 @@ private: System::Void button2_Click(System::Object^ sender, System::EventArgs^ e
 	numberOfTips->Text = Convert::ToString(tips);
 	if (tips == 0) button2->Enabled = false;
 }
+	   void showList(int level) {
+		   savePanel->Visible = false;
+		   timer1->Enabled = false;
+		   timeLimit->Enabled = true;
+		   settingsPanel->Visible = false;
+		   innerMainPanel->Controls->Clear();
+		   innerMainPanel->BackColor = System::Drawing::Color::WhiteSmoke;
+
+		   loadResults();
+
+		   innerMainPanel->Controls->Add(textArea);
+		   innerMainPanel->Controls->Add(easyButton);
+		   innerMainPanel->Controls->Add(mediumButton);
+		   innerMainPanel->Controls->Add(hardButton);
+		   textArea->Clear();
+		   int index = 1;
+		   for each (Result ^ elem in rows)
+		   {
+			   if (elem->level == level) {
+				   textArea->Text += index + ".\t";
+				   textArea->Text += elem->name;
+				   textArea->Text += "\t\t\t\t";
+				   textArea->Text += elem->min;
+				   textArea->Text += ":";
+				   textArea->Text += elem->sec;
+				   //textArea->Text += elem->time();
+				   textArea->Text += "\n";
+				   index++;
+			   }
+			  
+		   }
+	   }
+	   void sortRows() {
+		   cliext::vector<Result^> sorted;
+
+		   for (int i = 0; i < rows.size(); i++) {
+			   int id = findMin(rows);
+			   Result^ old = rows.at(id);
+			   Result^ temp = gcnew Result(old->name, old->min, old->sec, old->level);
+			   sorted.push_back(temp);
+			   rows.at(id)->min = "99";
+		   }
+		   rows = sorted;
+
+		   //int rc = Win32::AllocConsole();
+		   //freopen("CONOUT$", "w", stdout);
+		   //std::cout << "Console for tests:" << std::endl;
+
+		   for each (Result^ elem in sorted)
+		   {
+			   std::cout << elem->time() << std::endl;
+		   }
+	   }
+	   int findMin(cliext::vector<Result^> table) {
+		   if (table.size() > 0) {
+			   int min = table[0]->time();
+			   int id = 0;
+			   for (int i = 0; i < table.size(); i++) {
+
+				   if (rows[i]->time() < min) {
+					   min = rows[i]->time();
+					   id = i;
+				   }
+			   }
+			   return id;
+		   }
+		   return -1;
+		   
+	   }
+	   int level = 1;
 private: System::Void exitToolStripMenuItem_Click(System::Object^ sender, System::EventArgs^ e) {
-	savePanel->Visible = false;
-	timer1->Enabled = false;
-	timeLimit->Enabled = true;
-	settingsPanel->Visible = false;
-	innerMainPanel->Controls->Clear();
-	innerMainPanel->BackColor = System::Drawing::Color::WhiteSmoke;
+	showList(level);
 }
 
 private: System::Void easyToolStripMenuItem_Click(System::Object^ sender, System::EventArgs^ e) {
@@ -813,5 +943,81 @@ private: System::Void min10_Click(System::Object^ sender, System::EventArgs^ e) 
 	max_time = 10;
 }
 
+	cliext::vector<Result^> rows;
+
+private: System::Void saveButton_Click(System::Object^ sender, System::EventArgs^ e) {
+	loadResults();
+
+	String^ name = nameTextBox->Text;
+
+	Result^ newResult = gcnew Result(name, Convert::ToString(min), Convert::ToString(sec), level);
+
+	rows.push_back(newResult);
+
+
+	//std::ofstream file("test", std::ios_base::app);
+	std::ofstream file("rows.txt");
+	for each (Result^ var in rows)
+	{
+		String^ name = var -> name;
+		String^ min = var->min;
+		String^ sec = var->sec;
+
+		std::string lll = "";
+		lll+=var->level;
+		std::string stringName = msclr::interop::marshal_as<std::string>(name);
+		std::string stringMin = msclr::interop::marshal_as<std::string>(min);
+		std::string stringSec = msclr::interop::marshal_as<std::string>(sec);
+		//std::string stringSec = msclr::interop::marshal_as<std::string>(sec);
+		file << stringName <<"-"<< stringMin << ":" << stringSec <<" "<<var->level<<std::endl;
+	}
+
+
+	file.close();
+	savePanel->Visible = false;
+
+}
+	   void loadResults() {
+
+		   //int rc = Win32::AllocConsole();
+		   //freopen("CONOUT$", "w", stdout);
+		   //std::cout << "Console for tests:" << std::endl;
+		   rows.clear();
+		   std::ifstream file("rows.txt");
+		   if (file.is_open())
+		   {
+			   std::string row;
+			   while (getline(file,row) )
+			   {
+				   
+				   int id = row.find('-');
+				   std::string name = row.substr(0, id);
+				   std::string min = row.substr(id+1, 2);
+				   std::string sec = row.substr(id + 4, 2);
+				   std::string lvl = row.substr(id + 7, 1);
+				   //String^ min = text->Substring(id, 2);
+				   //String^ sec = text->Substring(id + 3, id + 5);
+				   String^ nameS = "";
+				   int lvlInt = std::stoi(lvl);
+
+				   Result^ newResult = gcnew Result(String::Concat(msclr::interop::marshal_as<System::String^>(name)) , String::Concat(msclr::interop::marshal_as<System::String^>(min)) , String::Concat(msclr::interop::marshal_as<System::String^>(sec)), lvlInt);
+				   rows.push_back(newResult);
+
+				   //std::cout << name <<"\n"<<min<<"\n"<<sec<< std::endl; //wypisz to co wczytałes z pliku
+				   //lub wykonaj inną operację
+			   }
+		   }
+		   file.close();
+		   sortRows();
+	   }
+private: System::Void easyButton_Click(System::Object^ sender, System::EventArgs^ e) {
+	showList(1);
+}
+private: System::Void mediumButton_Click(System::Object^ sender, System::EventArgs^ e) {
+	showList(2);
+}
+private: System::Void hardButton_Click(System::Object^ sender, System::EventArgs^ e) {
+	showList(3);
+}
 };
 }
