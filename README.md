@@ -7,7 +7,7 @@
 - Adam Marzec
 
 ### Opis aplikacji
-Aplikacja jest napisana w języku C++ i pozwala na przeprowadzenie rozgrywki Sudoku. Do wyboru mamy różne plansze oraz 3 poziomy trudności - po 3 plansze dla każdego poziomu trudności.
+Aplikacja jest napisana w języku C++/CLI  i pozwala na przeprowadzenie rozgrywki Sudoku. Do wyboru mamy różne plansze oraz 3 poziomy trudności - po 3 plansze dla każdego poziomu trudności. Oprogramowanie użyte do aplikacji Microsoft Visual Studio 2019. 
 
 ### Działanie aplikacji
 
