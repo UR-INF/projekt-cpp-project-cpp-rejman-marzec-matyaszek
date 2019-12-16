@@ -323,7 +323,7 @@ namespace Sudoku {
 			int randomInt = rand() % 3;
 			gameBoard->setSolution(sol[randomInt]);
 			gameBoard->setBoard(brd[randomInt]);
-
+			tips = 4;
 			
 		}
 		void setMediumLevel() {
@@ -342,7 +342,7 @@ namespace Sudoku {
 			int randomInt = rand() % 3;
 			gameBoard->setSolution(sol[randomInt]);
 			gameBoard->setBoard(brd[randomInt]);
-
+			tips = 4;
 
 		}
 		void setHardLevel() {
@@ -362,6 +362,8 @@ namespace Sudoku {
 			int randomInt = rand() % 3;
 			gameBoard->setSolution(sol[randomInt]);
 			gameBoard->setBoard(brd[randomInt]);
+			tips = 3;
+			
 
 
 		}
@@ -389,6 +391,7 @@ namespace Sudoku {
 			}
 
 			setNumberInFields(gameBoard->getBoard());
+			numberOfTips->Text = Convert::ToString(tips);
 
 		}
 		void setConsole() {
@@ -537,8 +540,6 @@ namespace Sudoku {
 		settingsPanel->Visible = true;
 		min = 0;
 		sec = 0;
-		tips = 10;
-		numberOfTips->Text = Convert::ToString(tips);
 		button1->Enabled = true;
 		button2->Enabled = true;
 		
