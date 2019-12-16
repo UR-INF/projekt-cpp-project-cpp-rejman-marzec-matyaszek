@@ -85,6 +85,7 @@ namespace Sudoku {
 	private: System::Windows::Forms::ToolStripMenuItem^ easyToolStripMenuItem;
 	private: System::Windows::Forms::ToolStripMenuItem^ mediumToolStripMenuItem;
 	private: System::Windows::Forms::ToolStripMenuItem^ hardToolStripMenuItem;
+	private: System::Windows::Forms::ToolStripMenuItem^ settingsToolStripMenuItem;
 
 
 
@@ -115,6 +116,7 @@ namespace Sudoku {
 			this->button1 = (gcnew System::Windows::Forms::Button());
 			this->timeLabel = (gcnew System::Windows::Forms::Label());
 			this->timer1 = (gcnew System::Windows::Forms::Timer(this->components));
+			this->settingsToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->menuStrip1->SuspendLayout();
 			this->innerMainPanel->SuspendLayout();
 			this->settingsPanel->SuspendLayout();
@@ -122,7 +124,10 @@ namespace Sudoku {
 			// 
 			// menuStrip1
 			// 
-			this->menuStrip1->Items->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(1) { this->fileToolStripMenuItem });
+			this->menuStrip1->Items->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(2) {
+				this->fileToolStripMenuItem,
+					this->settingsToolStripMenuItem
+			});
 			this->menuStrip1->Location = System::Drawing::Point(0, 0);
 			this->menuStrip1->Name = L"menuStrip1";
 			this->menuStrip1->Size = System::Drawing::Size(548, 24);
@@ -270,6 +275,12 @@ namespace Sudoku {
 			// 
 			this->timer1->Interval = 1000;
 			this->timer1->Tick += gcnew System::EventHandler(this, &MainForm::timer1_Tick);
+			// 
+			// settingsToolStripMenuItem
+			// 
+			this->settingsToolStripMenuItem->Name = L"settingsToolStripMenuItem";
+			this->settingsToolStripMenuItem->Size = System::Drawing::Size(61, 20);
+			this->settingsToolStripMenuItem->Text = L"Settings";
 			// 
 			// MainForm
 			// 
@@ -566,41 +577,55 @@ namespace Sudoku {
 		return table;
 	}
 
-private: System::Void button1_Click(System::Object^ sender, System::EventArgs^ e) {
-	
-	
-	//int rc = Win32::AllocConsole();
+		   void judge() {
+			   //int rc = Win32::AllocConsole();
 	//freopen("CONOUT$", "w", stdout);
 	//std::cout << "Console for tests:" << std::endl;
-	array< int >^ solution = this->gameBoard->getSolution();
-	array< int >^ actualBoard = fieldsToArray();
-	std::cout << solution->Length << std::endl;
+			   array< int >^ solution = this->gameBoard->getSolution();
+			   array< int >^ actualBoard = fieldsToArray();
+			   std::cout << solution->Length << std::endl;
 
-	bool equal = true;
-	for (int i = 0; i < 81; i++) {
-		//std::cout <<actualBoard[i]<< "=" <<solution[i]<< std::endl;
-		if (actualBoard[i] == solution[i]) equal = true;
-		else {
-			equal = false;
-			break;
-		}
-	}
+			   bool equal = true;
+			   for (int i = 0; i < 81; i++) {
+				   //std::cout <<actualBoard[i]<< "=" <<solution[i]<< std::endl;
+				   if (actualBoard[i] == solution[i]) equal = true;
+				   else {
+					   equal = false;
+					   break;
+				   }
+			   }
+			   
+
+			   std::string message = "It's not correct answer";
+			   if (min == max_time) {
+
+				   timer1->Enabled = false;
+				   message = "time is over";
+			   }
+			   //int intPart = 10;
+			   if (equal) {
+				   message = "YOU WON!";
+				   timer1->Enabled = false;
+
+			   }
+			   //std::cout << message << std::endl;
+			   String^ msg = String::Concat(msclr::interop::marshal_as<System::String^>(message));
+			   MessageBox::Show(msg);
+		   }
+private: System::Void button1_Click(System::Object^ sender, System::EventArgs^ e) {
+	judge();
 	
-
-	std::string message = "It's not correct answer";
-	//int intPart = 10;
-	if (equal) {
-		message = "YOU WON!";
-		timer1->Enabled = false;
-
-	}
-	//std::cout << message << std::endl;
-	String^ msg = String::Concat(msclr::interop::marshal_as<System::String^>(message));
-	MessageBox::Show(msg);
+	
 }
 	   int sec = 0;
 	   int min = 0;
 private: System::Void timer1_Tick(System::Object^ sender, System::EventArgs^ e) {
+
+	if (min == max_time) {
+		judge();
+
+		return;
+	}
 
 	String^ seconds = "";
 	String^ minuts = "";
@@ -619,6 +644,8 @@ private: System::Void timer1_Tick(System::Object^ sender, System::EventArgs^ e) 
 	timeLabel->Text = minuts +":"+ seconds;
 }
 	   int tips = 10;
+	   int max_time = 1;
+	   //tip button
 private: System::Void button2_Click(System::Object^ sender, System::EventArgs^ e) {
 
 	
