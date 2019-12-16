@@ -1,5 +1,14 @@
 #pragma once
 #include <string>
+#include <msclr/marshal_cppstd.h>
+
+using namespace System;
+using namespace System::ComponentModel;
+using namespace System::Collections;
+using namespace System::Windows::Forms;
+using namespace System::Data;
+using namespace System::Drawing;
+using namespace System::Runtime::InteropServices;
 using namespace System;
 ref class Result
 {
@@ -7,6 +16,7 @@ public:
 	String^ name;
 	String^ min;
 	String^ sec;
+
 
 public:
 
@@ -20,7 +30,18 @@ public:
 		this->sec = sec;
 	}
 
-private:
+	int time() {
+		String^ m = min;
+		std::string minute = msclr::interop::marshal_as<std::string>(m);
+		String^ s = sec;
+		std::string secunde = msclr::interop::marshal_as<std::string>(s);
+
+		int mInt = std::stoi(minute);
+		int sInt = std::stoi(secunde);
+
+		mInt = mInt * 60;
+		return mInt + sInt;
+	}
 
 };
 

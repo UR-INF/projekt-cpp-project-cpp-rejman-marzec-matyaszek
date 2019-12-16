@@ -8,6 +8,7 @@
 #include <fstream>
 #include "Result.h"
 #include <algorithm>
+#include <list>
 
 using namespace System;
 using namespace System::ComponentModel;
@@ -800,8 +801,46 @@ private: System::Void button2_Click(System::Object^ sender, System::EventArgs^ e
 			   textArea->Text += elem->min;
 			   textArea->Text += ":";
 			   textArea->Text += elem->sec;
+			   //textArea->Text += elem->time();
 			   textArea->Text += "\n";
 		   }
+	   }
+	   void sortRows() {
+		   cliext::vector<Result^> sorted;
+
+		   for (int i = 0; i < rows.size(); i++) {
+			   int id = findMin(rows);
+			   Result^ old = rows.at(id);
+			   Result^ temp = gcnew Result(old->name, old->min, old->sec);
+			   sorted.push_back(temp);
+			   rows.at(id)->min = "99";
+		   }
+		   rows = sorted;
+
+		   int rc = Win32::AllocConsole();
+		   freopen("CONOUT$", "w", stdout);
+		   std::cout << "Console for tests:" << std::endl;
+
+		   for each (Result^ elem in sorted)
+		   {
+			   std::cout << elem->time() << std::endl;
+		   }
+	   }
+	   int findMin(cliext::vector<Result^> table) {
+		   if (table.size() > 0) {
+			   int min = table[0]->time();
+			   int id = 0;
+			   for (int i = 0; i < table.size(); i++) {
+
+				   if (rows[i]->time() < min) {
+					   min = rows[i]->time();
+					   id = i;
+				   }
+			   }
+			   return id;
+		   }
+		   return -1;
+		   
 	   }
 private: System::Void exitToolStripMenuItem_Click(System::Object^ sender, System::EventArgs^ e) {
 	showList();
@@ -908,6 +947,7 @@ private: System::Void saveButton_Click(System::Object^ sender, System::EventArgs
 			   }
 		   }
 		   file.close();
+		   sortRows();
 	   }
 };
 }
