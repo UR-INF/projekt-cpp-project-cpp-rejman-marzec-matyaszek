@@ -7,7 +7,7 @@
 #include <msclr/marshal_cppstd.h>
 #include <fstream>
 #include "Result.h"
-
+#include <algorithm>
 
 using namespace System;
 using namespace System::ComponentModel;
@@ -128,6 +128,7 @@ namespace Sudoku {
 			this->min5 = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->min10 = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->innerMainPanel = (gcnew System::Windows::Forms::Panel());
+			this->textArea = (gcnew System::Windows::Forms::RichTextBox());
 			this->savePanel = (gcnew System::Windows::Forms::Panel());
 			this->label2 = (gcnew System::Windows::Forms::Label());
 			this->saveButton = (gcnew System::Windows::Forms::Button());
@@ -139,7 +140,6 @@ namespace Sudoku {
 			this->button1 = (gcnew System::Windows::Forms::Button());
 			this->timeLabel = (gcnew System::Windows::Forms::Label());
 			this->timer1 = (gcnew System::Windows::Forms::Timer(this->components));
-			this->textArea = (gcnew System::Windows::Forms::RichTextBox());
 			this->menuStrip1->SuspendLayout();
 			this->innerMainPanel->SuspendLayout();
 			this->savePanel->SuspendLayout();
@@ -175,7 +175,7 @@ namespace Sudoku {
 					this->mediumToolStripMenuItem, this->hardToolStripMenuItem
 			});
 			this->newGameToolStripMenuItem->Name = L"newGameToolStripMenuItem";
-			this->newGameToolStripMenuItem->Size = System::Drawing::Size(180, 22);
+			this->newGameToolStripMenuItem->Size = System::Drawing::Size(137, 22);
 			this->newGameToolStripMenuItem->Text = L"New game";
 			// 
 			// easyToolStripMenuItem
@@ -202,7 +202,7 @@ namespace Sudoku {
 			// exitToolStripMenuItem
 			// 
 			this->exitToolStripMenuItem->Name = L"exitToolStripMenuItem";
-			this->exitToolStripMenuItem->Size = System::Drawing::Size(180, 22);
+			this->exitToolStripMenuItem->Size = System::Drawing::Size(137, 22);
 			this->exitToolStripMenuItem->Text = L"Result Table";
 			this->exitToolStripMenuItem->Click += gcnew System::EventHandler(this, &MainForm::exitToolStripMenuItem_Click);
 			// 
@@ -261,6 +261,15 @@ namespace Sudoku {
 			this->innerMainPanel->Name = L"innerMainPanel";
 			this->innerMainPanel->Size = System::Drawing::Size(352, 363);
 			this->innerMainPanel->TabIndex = 2;
+			// 
+			// textArea
+			// 
+			this->textArea->Location = System::Drawing::Point(6, 7);
+			this->textArea->Name = L"textArea";
+			this->textArea->ReadOnly = true;
+			this->textArea->Size = System::Drawing::Size(340, 350);
+			this->textArea->TabIndex = 0;
+			this->textArea->Text = L"";
 			// 
 			// savePanel
 			// 
@@ -375,14 +384,6 @@ namespace Sudoku {
 			this->timer1->Interval = 1000;
 			this->timer1->Tick += gcnew System::EventHandler(this, &MainForm::timer1_Tick);
 			// 
-			// textArea
-			// 
-			this->textArea->Location = System::Drawing::Point(6, 7);
-			this->textArea->Name = L"textArea";
-			this->textArea->Size = System::Drawing::Size(340, 350);
-			this->textArea->TabIndex = 0;
-			this->textArea->Text = L"";
-			// 
 			// MainForm
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
@@ -405,7 +406,7 @@ namespace Sudoku {
 			this->settingsPanel->PerformLayout();
 			this->ResumeLayout(false);
 			this->PerformLayout();
-			showList();
+
 		}
 		//	WARNING!!!
 		//after editing MainForm in design view
@@ -701,7 +702,7 @@ namespace Sudoku {
 			   }
 			   
 
-			   std::string message = "It's not correct answer";
+			   std::string message = "this is not the correct answer";
 			   if (min == max_time) {
 
 				   timer1->Enabled = false;
@@ -886,8 +887,8 @@ private: System::Void saveButton_Click(System::Object^ sender, System::EventArgs
 		   std::ifstream file("rows.txt");
 		   if (file.is_open())
 		   {
-			   std::string row;//maksymalnie 9999 znaków w wierszu
-			   while (getline(file,row) )//dopóki jest co czytać
+			   std::string row;
+			   while (getline(file,row) )
 			   {
 				   
 				   int id = row.find('-');
@@ -906,7 +907,6 @@ private: System::Void saveButton_Click(System::Object^ sender, System::EventArgs
 				   //lub wykonaj inną operację
 			   }
 		   }
-
 		   file.close();
 	   }
 };
