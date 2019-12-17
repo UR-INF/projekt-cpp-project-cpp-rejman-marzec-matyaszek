@@ -13,7 +13,7 @@
 - Tablica wyników.
 - Podpowiedzi.
 
-### Instrukcja uruchomienia.
+### Instrukcja uruchomienia
 - Pobrać repozytorium.
 - Zaimportować projekt do Visual Studio 2019.
 - Skompilować i urochomić program.
